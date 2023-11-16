@@ -1,16 +1,24 @@
-# This is a sample Python script.
+import torch.cuda
+from facial_emotion_recognition import EmotionRecognition
+import face_recognition as fr
+import cv2 as cv
+print(torch.cuda.is_available())
+er :EmotionRecognition = EmotionRecognition(device='gpu', gpu_id=0)
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+cam = cv.VideoCapture(0)
 
+success, frame = cam.read()
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+frame = er.recognise_emotion(frame, return_type='BGR')
 
+cv.imshow("frame", frame)
 
-# Press the green button in the gutter to run the script.
+while True:
+    key = cv.waitKey(10)
+    if key & 0xff == 27:
+        break
+def main():
+    pass
+
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    main()
