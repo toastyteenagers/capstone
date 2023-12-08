@@ -4,6 +4,7 @@ from PIL import Image, ImageTk
 from fer import FER
 import face_recognition
 import os
+import logging
 
 class EmotionRecognitionDemo:
     def __init__(self, window, window_title):
