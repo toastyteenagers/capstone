@@ -3,7 +3,7 @@ from facial_emotion_recognition import EmotionRecognition
 import face_recognition as fr
 import cv2 as cv
 print(torch.cuda.is_available())
-er :EmotionRecognition = EmotionRecognition(device='gpu', gpu_id=0)
+er: EmotionRecognition = EmotionRecognition(device='gpu', gpu_id=0)
 
 cam = cv.VideoCapture(0)
 
