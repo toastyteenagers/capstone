@@ -20,7 +20,7 @@ class EmotionRecognitionDemo:
 
         # create labels
         self.emotion_label = tk.Label(window, text="Detected Emotion: None", font=("Helvetica", 16))
-        self.name_label = tk.Label(window, text="Recognized Face: ",font=("Helvetica", 16))
+        self.name_label = tk.Label(window, text="Recognized Face: ", font=("Helvetica", 16))
         self.name_label.pack(pady=10)
         self.emotion_label.pack(pady=10)
 
@@ -42,7 +42,6 @@ class EmotionRecognitionDemo:
         self.face_encodings = []
         self.face_names = []
         self.training_mode = False
-
 
         self.update()
 
@@ -86,7 +85,7 @@ class EmotionRecognitionDemo:
             face_encodings = face_recognition.face_encodings(frame, face_locations)
 
             # if one of the faces is detected...
-            #TODO: check if the detected face isnt in the dataset!
+            # TODO: check if the detected face isnt in the dataset!
             if face_encodings:
                 # assuming theres only one face in frame.
                 face_encoding = face_encodings[0]
@@ -128,7 +127,13 @@ class EmotionRecognitionDemo:
         self.cap.release()
         self.window.destroy()
 
+
 # create tkinter and run the app
 root = tk.Tk()
 app = EmotionRecognitionDemo(root, "Project Awesome")
+log_file_path = os.path.join(os.getcwd(), 'event.log')
+logging.basicConfig(filename=log_file_path, level=logging.INFO,
+                    format='%(asctime)s:%(message)s', datefmt='[%d %b %Y %H:%M:%S]')
+logging.info('[SYS_START] [1] [...] [SU] [...] [...]')
+print("Log file path:", log_file_path)
 root.mainloop()
