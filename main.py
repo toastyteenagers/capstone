@@ -132,8 +132,10 @@ class EmotionRecognitionDemo:
 root = tk.Tk()
 app = EmotionRecognitionDemo(root, "Project Awesome")
 log_file_path = os.path.join(os.getcwd(), 'event.log')
+for handler in logging.root.handlers[:]:
+    logging.root.removeHandler(handler)
 logging.basicConfig(filename=log_file_path, level=logging.INFO,
-                    format='%(asctime)s:%(message)s', datefmt='[%d %b %Y %H:%M:%S]')
+                    format='%(asctime)s %(message)s', datefmt='[%d %b %Y %H:%M:%S]')
 logging.info('[SYS_START] [1] [...] [SU] [...] [...]')
 print("Log file path:", log_file_path)
 root.mainloop()
