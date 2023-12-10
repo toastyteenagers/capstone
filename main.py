@@ -1,9 +1,11 @@
+
 import cv2
 import tkinter as tk
 from PIL import Image, ImageTk
 from fer import FER
 import face_recognition
 import os
+
 
 title = "Capstone"
 fontChoice = 'Arial'
