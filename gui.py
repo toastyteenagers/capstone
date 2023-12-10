@@ -3,9 +3,7 @@ from tkinter import font
 
 import cv2
 from PIL import Image, ImageTk
-#from fer import FER
-
-
+import adminMode
 
 title = "Capstone"
 fontChoice = 'Arial'
@@ -14,8 +12,9 @@ windowSize = "900x500"
 windowSizeX = 810
 windowSizeY = 500
 
-definedUser = "test"
-definedPassword = "abc"
+#to be changed later!
+definedUser = "admin"
+definedPassword = "nimda"
 
 
 
@@ -30,9 +29,9 @@ def welcomeScreen():
     frame.pack(expand=True)
 
     #Buttons
-    adminButton = tk.Button(frame, text="User Mode", command=adminScreen, bg="green", fg="white", font=font.Font(family=fontChoice, size=32))
+    adminButton = tk.Button(frame, text="Admin Mode", command=adminScreen, bg="green", fg="white", font=font.Font(family=fontChoice, size=32))
     adminButton.pack(side=tk.LEFT, padx=10)
-    userButton = tk.Button(frame, text="Admin Mode", command=mainScreen, bg="red", fg="white", font=font.Font(family=fontChoice, size=32))
+    userButton = tk.Button(frame, text="User Mode", command=mainScreen, bg="red", fg="white", font=font.Font(family=fontChoice, size=32))
     userButton.pack(side=tk.LEFT, padx=10)
 
 def adminScreen():
@@ -44,7 +43,9 @@ def adminScreen():
 
     def credentialsCheck(username, password):
         if(username == definedUser and password == definedPassword):
-            mainScreen()
+            print("here")
+            root.destroy()
+            adminMode.start_app()
         elif(password != definedPassword or username != definedUser):
             prompt = tk.Label(root, text = "Password does not match User Information!", fg="red", font = (fontChoice, 20))
             prompt.pack(pady=10,anchor=tk.W)

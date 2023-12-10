@@ -1,0 +1,1 @@
+# user mode should just display the user, their emotion detected, and their face recogntion status
