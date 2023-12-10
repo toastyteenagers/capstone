@@ -5,6 +5,7 @@ from PIL import Image, ImageTk
 from fer import FER
 import face_recognition
 import os
+import logging
 
 
 title = "Capstone"
@@ -129,8 +130,8 @@ class EmotionRecognitionDemo:
         self.dataFrame.pack(padx=10,pady=50)
 
         # create labels
-        self.emotion_label = tk.Label(self.dataFrame, text="Detected Emotion: None", font=("Helvetica", 16))
-        self.name_label = tk.Label(self.dataFrame, text="Recognized Face: ",font=("Helvetica", 16))
+        self.emotion_label = tk.Label(window, text="Detected Emotion: None", font=("Helvetica", 16))
+        self.name_label = tk.Label(window, text="Recognized Face: ", font=("Helvetica", 16))
         self.name_label.pack(pady=10)
         self.emotion_label.pack(pady=10)
 
@@ -160,6 +161,10 @@ class EmotionRecognitionDemo:
         self.face_names = []
         self.training_mode = False
 
+        self.update()
+
+    def update(self):
+        # grab a single frame
         self.updateVideo()
 
     def updateVideo(self):
@@ -215,7 +220,7 @@ class EmotionRecognitionDemo:
             face_encodings = face_recognition.face_encodings(frame, face_locations)
 
             # if one of the faces is detected...
-            #TODO: check if the detected face isnt in the dataset!
+            # TODO: check if the detected face isnt in the dataset!
             if face_encodings:
                 # assuming theres only one face in frame.
                 face_encoding = face_encodings[0]
@@ -257,6 +262,20 @@ class EmotionRecognitionDemo:
         self.cap.release()
         self.window.destroy()
 
+
+
+# create tkinter and run the app
+root = tk.Tk()
+app = EmotionRecognitionDemo(root, "Project Awesome")
+log_file_path = os.path.join(os.getcwd(), 'event.log')
+for handler in logging.root.handlers[:]:
+    logging.root.removeHandler(handler)
+logging.basicConfig(filename=log_file_path, level=logging.INFO,
+                    format='%(asctime)s %(message)s', datefmt='[%d %b %Y %H:%M:%S]')
+logging.info('[SYS_START] [1] [...] [SU] [...] [...]')
+print("Log file path:", log_file_path)
+root.mainloop()
+=======
 def mainScreen(person = EmotionRecognitionDemo):
     for widget in root.winfo_children():
         widget.destroy()
