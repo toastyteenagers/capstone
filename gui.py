@@ -1,4 +1,6 @@
 import tkinter as tk
+from tkinter import font
+
 import cv2
 from PIL import Image, ImageTk
 #from fer import FER
@@ -21,27 +23,20 @@ definedPassword = "abc"
 def welcomeScreen():
     for widget in root.winfo_children():
         widget.destroy()
-    #Welcome Text
-    welcomeText = tk.Label(root, text = "Welcome!", font=(fontChoice, 150))
-    welcomeText.pack(pady=25)
-
-    pickText = tk.Label(root, text = "Please pick a user type.", font=(fontChoice, 40))
+    pickText = tk.Label(root, text = "Please pick a user type:", font=(fontChoice, 40))
     pickText.pack(pady=20)
 
-    #User/Admin Button Frame
-    userFrame = tk.Frame(root)
-    userFrame.columnconfigure(0, weight=1)
-    userFrame.columnconfigure(1, weight=1)
+    frame = tk.Frame(root)
+    frame.pack(expand=True)
 
     #Buttons
-    adminButton = tk.Button(userFrame, text = "Admin",command = adminScreen, font=(fontChoice, 50))
-    adminButton.grid(row=0,column=0,sticky=tk.W+tk.E)
-    userButton = tk.Button(userFrame, text = "User", command=mainScreen, font = (fontChoice, 50))
-    userButton.grid(row=0,column=1,sticky=tk.W+tk.E)
-
-    userFrame.pack(padx = 30, pady = 45, fill='x')
+    adminButton = tk.Button(frame, text="User Mode", command=adminScreen, bg="green", fg="white", font=font.Font(family=fontChoice, size=32))
+    adminButton.pack(side=tk.LEFT, padx=10)
+    userButton = tk.Button(frame, text="Admin Mode", command=mainScreen, bg="red", fg="white", font=font.Font(family=fontChoice, size=32))
+    userButton.pack(side=tk.LEFT, padx=10)
 
 def adminScreen():
+    # clear screen
     for widget in root.winfo_children():
         widget.destroy()
 
