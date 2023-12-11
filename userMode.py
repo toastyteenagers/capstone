@@ -7,10 +7,11 @@ from fer import FER
 import face_recognition
 import os
 import logging
+import pickle
 
-
-title = "Capstone"
+title = "User Mode"
 fontChoice = 'Arial'
+bgcolor = "#EBE6D9"
 # Change both if you want to adjust the size of the window
 windowSize = "900x550"
 windowSizeX = 810
@@ -22,6 +23,7 @@ def start_app():
     root = tk.Tk()
     root.geometry(windowSize)
     root.title(title)
+    root.configure(bg=bgcolor)
     app = UserMode(root, "Project Awesome","admin")
     log_file_path = os.path.join(os.getcwd(), 'event.log')
     for handler in logging.root.handlers[:]:
@@ -42,8 +44,10 @@ class UserMode:
         self.window = window
         self.window.geometry(windowSize)
         self.window.title(window_title)
-
+        self.window.configure(bg=bgcolor)
         self.cap = cv2.VideoCapture(0)
+
+        self.loadUserData()
 
         videoFrame = tk.Frame(window, borderwidth=2, relief='solid')
         videoFrame.pack(side=tk.LEFT,padx=10,pady=10)
@@ -53,12 +57,12 @@ class UserMode:
         self.canvas = tk.Canvas(videoFrame, width=self.canvasWidth, height=self.canvasHeight)
         self.canvas.pack()
 
-        self.dataFrame = tk.Frame(window)
-        self.dataFrame.pack(padx=10,pady=50)
+        self.dataFrame = tk.Frame(window,bg=bgcolor)
+        self.dataFrame.pack(padx=10,pady=(100,0),side="top", anchor="n")
 
         # create labels
-        self.emotion_label = tk.Label(window, text="Detected Emotion: None", font=("Helvetica", 16))
-        self.name_label = tk.Label(window, text="Recognized Face: ", font=("Helvetica", 16))
+        self.emotion_label = tk.Label(window, text="Detected Emotion: None", font=("Helvetica", 16),bg=bgcolor)
+        self.name_label = tk.Label(window, text="Recognized Face: ", font=("Helvetica", 16),bg=bgcolor)
         self.name_label.pack(pady=10)
         self.emotion_label.pack(pady=10)
 
@@ -67,7 +71,7 @@ class UserMode:
         self.recognize_button.pack(pady=10)
 
         #validity notifier
-        self.validityCanvas = tk.Label(self.dataFrame, text="Locked", fg='red', font=("Helvetica", 16))
+        self.validityCanvas = tk.Label(self.dataFrame, text="Locked", fg='red', font=("Helvetica", 16),bg=bgcolor)
         self.validityCanvas.pack(pady=10)
 
         # create fer instance
@@ -83,6 +87,23 @@ class UserMode:
     def update(self):
         # grab a single frame
         self.updateVideo()
+
+    def loadUserData(self):
+        filePath = "user_data.pkl"
+        data = {}
+
+        with open(filePath, "rb") as pickle_file:
+            data = pickle.load(pickle_file)
+
+        if isinstance(data,dict):
+            self.face_encodings = data["face_encodings"]
+            self.face_names = data["face_names"]
+            print(self.face_encodings)
+            print("Successfully loaded user_data")
+        else:
+            self.face_encodings = []
+            self.face_names = []
+            print("Unable to load user_data")
 
     def updateVideo(self):
         # cap.get(3) = width of video, cap.get(4) = height of video

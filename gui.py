@@ -7,6 +7,7 @@ import adminMode
 
 title = "Capstone"
 fontChoice = 'Arial'
+bgcolor = "#EBE6D9"
 #Change both if you want to adjust the size of the window
 windowSize = "900x500"
 windowSizeX = 810
@@ -22,10 +23,10 @@ definedPassword = "nimda"
 def welcomeScreen():
     for widget in root.winfo_children():
         widget.destroy()
-    pickText = tk.Label(root, text = "Please pick a user type:", font=(fontChoice, 40))
+    pickText = tk.Label(root, text = "Please pick a user type:", font=(fontChoice, 40), bg=bgcolor)
     pickText.pack(pady=20)
 
-    frame = tk.Frame(root)
+    frame = tk.Frame(root, bg=bgcolor)
     frame.pack(expand=True)
 
     #Buttons
@@ -54,25 +55,25 @@ def adminScreen():
             prompt = tk.Label(root, text = "Password does not match User Information!", fg="red", font = (fontChoice, 20))
             prompt.pack(pady=10,anchor=tk.W)
 
-    adminText = tk.Label(root, text = "Admin Mode:", font = (fontChoice, 35))
+    adminText = tk.Label(root, text = "Admin Mode:", font = (fontChoice, 35), bg=bgcolor)
     adminText.pack(anchor=tk.W)
 
-    prompt = tk.Label(root, text = "Please Enter your username and password.", font = (fontChoice, 20))
+    prompt = tk.Label(root, text = "Please Enter your username and password.", font = (fontChoice, 20),bg=bgcolor)
     prompt.pack(pady=10,anchor=tk.W)
 
     #text entry frame
-    entryFrame = tk.Frame(root)
+    entryFrame = tk.Frame(root,bg=bgcolor)
     entryFrame.rowconfigure(0, weight=1)
     entryFrame.rowconfigure(1, weight=1)
     entryFrame.columnconfigure(0, weight=1)
     entryFrame.columnconfigure(1, weight=3)
 
-    userNameText = tk.Label(entryFrame, text = "Username:", font = (fontChoice, 25))
+    userNameText = tk.Label(entryFrame, text = "Username:", font = (fontChoice, 25),bg=bgcolor)
     userNameText.grid(row=0, column=0, sticky=tk.E)
     userNameEntry = tk.Entry(entryFrame, font = (fontChoice, 25))
     userNameEntry.grid(row=0, column=1, sticky=tk.E+tk.W)
 
-    passwordText = tk.Label(entryFrame, text = "Password:", font = (fontChoice, 25))
+    passwordText = tk.Label(entryFrame, text = "Password:", font = (fontChoice, 25),bg=bgcolor)
     passwordText.grid(row=1, column=0, sticky=tk.E)
     passwordEntry = tk.Entry(entryFrame, font = (fontChoice, 25))
     passwordEntry.grid(row=1, column=1, sticky=tk.E+tk.W)
@@ -129,6 +130,9 @@ def mainScreen():
     
 #Base window creation
 root = tk.Tk()
+
+#Background Color
+root.configure(bg=bgcolor)
 
 #Window size
 root.geometry(windowSize)

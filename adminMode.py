@@ -6,10 +6,13 @@ from fer import FER
 import face_recognition
 import os
 import logging
+import pickle
+import userMode
+from gui import *
 
-
-title = "Capstone"
+title = "Admin Mode"
 fontChoice = 'Arial'
+bgcolor = "#EBE6D9"
 # Change both if you want to adjust the size of the window
 windowSize = "900x550"
 windowSizeX = 810
@@ -41,6 +44,7 @@ class AdminMode:
         self.window = window
         self.window.geometry(windowSize)
         self.window.title(window_title)
+        self.window.configure(bg=bgcolor)
 
         self.cap = cv2.VideoCapture(0)
 
@@ -52,12 +56,12 @@ class AdminMode:
         self.canvas = tk.Canvas(videoFrame, width=self.canvasWidth, height=self.canvasHeight)
         self.canvas.pack()
 
-        self.dataFrame = tk.Frame(window)
-        self.dataFrame.pack(padx=10,pady=50)
+        self.dataFrame = tk.Frame(window,bg=bgcolor)
+        self.dataFrame.pack(padx=10,pady=(100,0), side="top", anchor="n")
 
         # create labels
-        self.emotion_label = tk.Label(window, text="Detected Emotion: None", font=("Helvetica", 16))
-        self.name_label = tk.Label(window, text="Recognized Face: ", font=("Helvetica", 16))
+        self.emotion_label = tk.Label(window, text="Detected Emotion: None", font=("Helvetica", 16),bg=bgcolor)
+        self.name_label = tk.Label(window, text="Recognized Face: ", font=("Helvetica", 16),bg=bgcolor)
         self.name_label.pack(pady=10)
         self.emotion_label.pack(pady=10)
 
@@ -72,6 +76,10 @@ class AdminMode:
 
             self.recognize_button = tk.Button(self.dataFrame, text="Recognize Face", command=self.recognize_face)
             self.recognize_button.pack(pady=10)
+
+        #fix later
+        #self.userModeButton = tk.Button(self.dataFrame, text="Enter User Mode", command=self.switchUserMode)
+        #self.userModeButton.pack(pady=10)
 
         #validity notifier
         if(self.emotion == "fear"):
@@ -92,6 +100,10 @@ class AdminMode:
     def update(self):
         # grab a single frame
         self.updateVideo()
+
+    def switchUserMode(self):
+        self.window.destroy()
+        userMode.start_app()
 
     def updateVideo(self):
         # cap.get(3) = width of video, cap.get(4) = height of video
@@ -156,9 +168,21 @@ class AdminMode:
                 self.face_encodings.append(face_encoding)
                 self.face_names.append(name)
 
+                self.saveUserData()
                 #TODO: encode and save the face!
 
         self.training_mode = False
+
+    def saveUserData(self):
+        data = {
+            "face_encodings": self.face_encodings,
+            "face_names": self.face_names
+        }
+        filePath = "user_data.pkl"
+
+        with open(filePath, "wb") as pickle_file:
+            pickle.dump(data, pickle_file)
+            print("successfully saved data")
 
     def recognize_face(self):
         # recognizing face isnt a training mode
@@ -183,5 +207,6 @@ class AdminMode:
                     self.name_label.config(text=f"Detected Face: {name}")
 
                 print(f"Recognized face: {name}")
+
 
 
