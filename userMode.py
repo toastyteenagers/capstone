@@ -99,6 +99,7 @@ class UserMode:
             self.face_encodings = data["face_encodings"]
             self.face_names = data["face_names"]
             print(self.face_encodings)
+            print(self.face_names)
             print("Successfully loaded user_data")
         else:
             self.face_encodings = []
@@ -150,7 +151,6 @@ class UserMode:
 
         # grab a frame.
         ret, frame = self.cap.read()
-        #TODO: read in all trained faces, check against the current face.
         if ret:
             # grab all faces and encodings
             face_locations = face_recognition.face_locations(frame)
