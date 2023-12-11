@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import font
-
+import userMode
 import cv2
 from PIL import Image, ImageTk
 import adminMode
@@ -29,10 +29,14 @@ def welcomeScreen():
     frame.pack(expand=True)
 
     #Buttons
-    adminButton = tk.Button(frame, text="Admin Mode", command=adminScreen, bg="green", fg="white", font=font.Font(family=fontChoice, size=32))
+    adminButton = tk.Button(frame, text="Admin Mode", command=adminScreen, bg="red", fg="white", font=font.Font(family=fontChoice, size=32))
     adminButton.pack(side=tk.LEFT, padx=10)
-    userButton = tk.Button(frame, text="User Mode", command=mainScreen, bg="red", fg="white", font=font.Font(family=fontChoice, size=32))
+    userButton = tk.Button(frame, text="User Mode", command=start_userMode, bg="green", fg="white", font=font.Font(family=fontChoice, size=32))
     userButton.pack(side=tk.LEFT, padx=10)
+
+def start_userMode():
+    root.destroy()
+    userMode.start_app()
 
 def adminScreen():
     # clear screen
