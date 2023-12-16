@@ -17,9 +17,6 @@ windowSizeY = 500
 definedUser = "admin"
 definedPassword = "nimda"
 
-
-
-
 def welcomeScreen():
     for widget in root.winfo_children():
         widget.destroy()
@@ -49,16 +46,22 @@ def adminScreen():
     def credentialsCheck(username, password):
         if(username == definedUser and password == definedPassword):
             print("here")
+            #showAdminMode()
             root.destroy()
             adminMode.start_app()
         elif(password != definedPassword or username != definedUser):
             prompt = tk.Label(root, text = "Password does not match User Information!", fg="red", font = (fontChoice, 20))
             prompt.pack(pady=10,anchor=tk.W)
 
+    # attempt at making seamless transitions between screens
+    # def showAdminMode():
+    #     root.withdraw()
+    #     adminMode.start_app()
+
     adminText = tk.Label(root, text = "Admin Mode:", font = (fontChoice, 35), bg=bgcolor)
     adminText.pack(anchor=tk.W)
 
-    prompt = tk.Label(root, text = "Please Enter your username and password.", font = (fontChoice, 20),bg=bgcolor)
+    prompt = tk.Label(root, text = "Please enter your username and password.", font = (fontChoice, 20), bg=bgcolor)
     prompt.pack(pady=10,anchor=tk.W)
 
     #text entry frame
@@ -78,11 +81,13 @@ def adminScreen():
     passwordEntry = tk.Entry(entryFrame, font = (fontChoice, 25))
     passwordEntry.grid(row=1, column=1, sticky=tk.E+tk.W)
 
+    backButton = tk.Button(entryFrame, text="Back", command=welcomeScreen, font=(fontChoice, 20))
+    backButton.grid(row=2, column=0, sticky=tk.E+tk.W)
+
     enterButton = tk.Button(entryFrame, text = "Enter", command = lambda:credentialsCheck(userNameEntry.get(), passwordEntry.get()), font = (fontChoice, 30))
     enterButton.grid(row=2, column=1, sticky=tk.E+tk.W)
 
     entryFrame.pack(padx = 30, fill='x')
-
 
 
 def mainScreen():

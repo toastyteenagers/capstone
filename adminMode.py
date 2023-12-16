@@ -66,7 +66,7 @@ class AdminMode:
         self.emotion_label.pack(pady=10)
 
         # name entry field
-        if(permissions == "admin"):
+        if permissions == "admin":
             self.name_entry = tk.Entry(self.dataFrame)
             self.name_entry.pack(pady=10)
 
@@ -76,6 +76,10 @@ class AdminMode:
 
             self.recognize_button = tk.Button(self.dataFrame, text="Recognize Face", command=self.recognize_face)
             self.recognize_button.pack(pady=10)
+
+            # attempt at adding back button on admin screen
+            # self.back_button = tk.Button(self.dataFrame, text="Back", command=welcomeScreen)
+            # self.back_button.pack(pady=10)
 
         #fix later
         #self.userModeButton = tk.Button(self.dataFrame, text="Enter User Mode", command=self.switchUserMode)
@@ -183,9 +187,10 @@ class AdminMode:
         with open(filePath, "wb") as pickle_file:
             pickle.dump(data, pickle_file)
             print("successfully saved data")
+        logging.info('[USER_ADD] [2] [User data successfully saved] [...] [...] [...]')
 
     def recognize_face(self):
-        # recognizing face isnt a training mode
+        # recognizing face isn't a training mode
         self.training_mode = False
 
         # grab a frame.
@@ -206,7 +211,14 @@ class AdminMode:
                     name = self.face_names[first_match_index]
                     self.name_label.config(text=f"Detected Face: {name}")
 
+                    top, right, bottom, left = face_locations[first_match_index]
+                    cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
+                    cv2.rectangle(frame, (left, bottom - 20), (right, bottom), (0, 0, 255), cv2.FILLED)
+                    font = cv2.FONT_HERSHEY_PLAIN
+                    cv2.putText(frame, name, (left + 6, bottom -6), font, 1.0, (255, 255, 255), 1)
+
                 print(f"Recognized face: {name}")
 
+            cv2.imshow('Video', frame)
 
-
+        self.window.after(100, self.recognize_face)
