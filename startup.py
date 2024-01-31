@@ -76,13 +76,13 @@ class Ui_LoadScreen(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><img src=\":/images/images/project_backdown_ascii_art.jpg\" /></p></body></html>"))
 
 
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    LoadScreen = QtWidgets.QWidget()
-    ui = Ui_LoadScreen()
-    ui.setupUi(LoadScreen)
-    QtCore.QTimer.singleShot(1000, ui.playStartupSound)
-    LoadScreen.show()
-    sys.exit(app.exec())
-    #test edit for git again
+# if __name__ == "__main__":
+#     import sys
+#     app = QtWidgets.QApplication(sys.argv)
+#     LoadScreen = QtWidgets.QWidget()
+#     ui = Ui_LoadScreen()
+#     ui.setupUi(LoadScreen)
+#     QtCore.QTimer.singleShot(1000, ui.playStartupSound)
+#     LoadScreen.show()
+#     sys.exit(app.exec())
+#     #test edit for git again
