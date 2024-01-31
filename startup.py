@@ -85,4 +85,3 @@ if __name__ == "__main__":
     QtCore.QTimer.singleShot(1000, ui.playStartupSound)
     LoadScreen.show()
     sys.exit(app.exec())
-    # test edit for git
