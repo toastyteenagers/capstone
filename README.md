@@ -15,5 +15,7 @@ Problem Domain Book:
 The excellent "Deep Learning" by Ian Goodfellow Et Al. ![book image](https://m.media-amazon.com/images/I/A1GbblX7rOL._AC_UF1000,1000_QL80_.jpg)
 
 [Analysis of Heart Rate Physiology](https://www.researchgate.net/figure/Distribution-of-average-daily-resting-heart-rates-The-average-daily-RHR-for-57-836_fig2_339061433)
+
 [Video Based Stress Detection](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7582689/)
+
 [Analysis of HRV on Physiological Stress](https://onlinelibrary.wiley.com/doi/abs/10.1111/sms.12683)
