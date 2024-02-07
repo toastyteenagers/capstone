@@ -1,6 +1,6 @@
-# capstone
+# CS 426 Senior Project in Computer Science, Spring 2024 at UNR (University of Nevada, Reno) CSE Department
 # A Multi-Layered Biometric Access Control Device That Detects Duress Of An Authenticated User
-Team 11: Hayden Coffing, Roohan Amin, Owen Boxx Alexander Raam
+Team 11 (Team Awesome): Alexander Ram, Hayden Coffing, Owen Boxx, Roohan Amin
 Instructors: David Feil-Seifer, Devrin Lee, Sara Davis
 TAs: Vinh Le, Zach Estreito
 Advisor(s): Ignacio Astaburuaga, CSE Instructor
