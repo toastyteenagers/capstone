@@ -19,3 +19,5 @@ The excellent "Deep Learning" by Ian Goodfellow Et Al. ![book image](https://m.m
 [Video Based Stress Detection](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7582689/)
 
 [Analysis of HRV on Physiological Stress](https://onlinelibrary.wiley.com/doi/abs/10.1111/sms.12683)
+
+[PyQt6 Documentation](https://www.riverbankcomputing.com/static/Docs/PyQt6/index.html) ![PyQt6 logo](https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.pythonguis.com%2Ftopics%2Fpyqt6%2F&psig=AOvVaw2E2Mp1sk7IqV3B9u7pFrF8&ust=1707372653941000&source=images&cd=vfe&opi=89978449&ved=0CBMQjRxqFwoTCPDtmvbImIQDFQAAAAAdAAAAABAE)
