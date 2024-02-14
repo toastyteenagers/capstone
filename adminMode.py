@@ -9,6 +9,8 @@ import logging
 import pickle
 import userMode
 from gui import *
+from UserFields import UserFields
+import csv
 
 title = "Admin Mode"
 fontChoice = 'Arial'
@@ -37,6 +39,8 @@ def start_app():
 
 class AdminMode:
     def __init__(self, window, window_title, permissions = "user"):
+        self.active_users = []
+        self.loadUserData()
         self.name = "unknown"
         self.emotion = "unknown"
 
@@ -164,15 +168,45 @@ class AdminMode:
 
                 name = self.name_entry.get()
 
+                #Creation of user instance. Will need to change later and add correct perameters
+                user = UserFields(name, face_encoding,0,0)
+                #Append User to list of Users
+                self.active_users.append(user)
+                #Store users in database
+                self.save_User()
+
                 # add face and name to the lists.
                 self.face_encodings.append(face_encoding)
                 self.face_names.append(name)
 
-                self.saveUserData()
-                #TODO: encode and save the face!
+                #self.saveUserData()
 
         self.training_mode = False
+    #function to test and print user data and write to csv
+    def printUserData(self):
+        for j in self.active_users:
+            print(j.get_name())
+        with open('Users.csv', mode="w", newline="") as csvfile:
+            writer = csv.writer(csvfile)
+            writer.writerow(['Name', 'Encodings', 'rhr', 'disability'])
+            for user in self.active_users:
+                writer.writerow([user.get_name(), user.get_vector(), user.get_rhr(), user.get_disability()])
 
+
+
+
+    #new function to load user data
+    def loadUserData(self):
+        filepath = "newUsers.pkl"
+        try:
+            with open(filepath, "rb") as pickle_file:
+                self.active_users = pickle.load(pickle_file)
+                print("User Data loaded")
+                self.printUserData()
+        except FileNotFoundError:
+            print("User Data not found")
+
+    #Delete Function on transfer to new GUI (Have new one named "save_User")
     def saveUserData(self):
         data = {
             "face_encodings": self.face_encodings,
@@ -183,6 +217,14 @@ class AdminMode:
         with open(filePath, "wb") as pickle_file:
             pickle.dump(data, pickle_file)
             print("successfully saved data")
+
+    #New User saving function that saves class object instead
+    def save_User(self):
+        filepath = "newUsers.pkl"
+
+        with open(filepath, "wb") as pickle_file:
+            pickle.dump(self.active_users, pickle_file)
+            print("Successfully saved active user")
 
     def recognize_face(self):
         # recognizing face isnt a training mode
@@ -207,6 +249,3 @@ class AdminMode:
                     self.name_label.config(text=f"Detected Face: {name}")
 
                 print(f"Recognized face: {name}")
-
-
-
