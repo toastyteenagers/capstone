@@ -1,5 +1,13 @@
-from gui import *
+import sys
+from PyQt6 import QtWidgets, QtCore
+from startup import Ui_LoadScreen
 
-# run the welcome screen from gui, as its the entry point for the project.
-if __name__ == '__main__':
-    gui.welcomeScreen()
+if __name__ == "__main__":
+    app = QtWidgets.QApplication(sys.argv)
+    LoadScreen = QtWidgets.QWidget()
+    ui = Ui_LoadScreen()
+    ui.setupUi(LoadScreen)
+    QtCore.QTimer.singleShot(1000, ui.playStartupSound)
+    LoadScreen.show()
+    sys.exit(app.exec())
+    #test edit for git again
