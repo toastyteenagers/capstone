@@ -1,7 +1,3 @@
-# capstone
-capstone project for cs 425/426
-written by hayden coffing, owen boxx, alexander ram, and roohan amin
-=======
 # CS 426 Senior Project in Computer Science, Spring 2024 at UNR (University of Nevada, Reno) CSE Department
 # A Multi-Layered Biometric Access Control Device That Detects Duress Of An Authenticated User
 Team 11 (Team Awesome): Alexander Ram, Hayden Coffing, Owen Boxx, Roohan Amin
