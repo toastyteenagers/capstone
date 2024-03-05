@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>InitConfMain</class>
+ <widget class="QWidget" name="InitConfMain">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1920</width>
+    <height>1080</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: black;</string>
+  </property>
+  <widget class="Line" name="line_5">
+   <property name="geometry">
+    <rect>
+     <x>1400</x>
+     <y>10</y>
+     <width>511</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: gray;</string>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+  </widget>
+  <widget class="Line" name="line_4">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>1020</y>
+     <width>1901</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: gray;</string>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+  </widget>
+  <widget class="Line" name="line_3">
+   <property name="geometry">
+    <rect>
+     <x>1890</x>
+     <y>10</y>
+     <width>21</width>
+     <height>1031</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: gray</string>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Vertical</enum>
+   </property>
+  </widget>
+  <widget class="Line" name="line_2">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>21</width>
+     <height>1031</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: gray</string>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Vertical</enum>
+   </property>
+  </widget>
+  <widget class="Line" name="line">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>521</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: gray;</string>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>550</x>
+     <y>10</y>
+     <width>831</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>TI-92p Mini Sans</family>
+     <pointsize>36</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: gray;</string>
+   </property>
+   <property name="text">
+    <string>First Time Setup Sequence</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="AdminControlsButton">
+   <property name="geometry">
+    <rect>
+     <x>80</x>
+     <y>80</y>
+     <width>431</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: white;
+font: 28pt &quot;TI-92p Mini Sans&quot;;</string>
+   </property>
+   <property name="text">
+    <string>- Admin Controls</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="AddUserButton">
+   <property name="geometry">
+    <rect>
+     <x>80</x>
+     <y>160</y>
+     <width>281</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: white;
+font: 28pt &quot;TI-92p Mini Sans&quot;;</string>
+   </property>
+   <property name="text">
+    <string>- Add User</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="AccessiblilityButton">
+   <property name="geometry">
+    <rect>
+     <x>80</x>
+     <y>240</y>
+     <width>411</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: white;
+font: 28pt &quot;TI-92p Mini Sans&quot;;</string>
+   </property>
+   <property name="text">
+    <string>- Accessibility</string>
+   </property>
+  </widget>
+  <zorder>line</zorder>
+  <zorder>line_5</zorder>
+  <zorder>line_4</zorder>
+  <zorder>line_3</zorder>
+  <zorder>line_2</zorder>
+  <zorder>label</zorder>
+  <zorder>AdminControlsButton</zorder>
+  <zorder>AddUserButton</zorder>
+  <zorder>AccessiblilityButton</zorder>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
