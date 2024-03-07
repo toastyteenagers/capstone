@@ -9,7 +9,7 @@ import csv
 from UserFields import UserFields
 import random
 
-class UI_UserList(QWidget):
+class Ui_UserList(QWidget):
     def __init__(self):
         super().__init__()
         self.active_users = []
@@ -117,6 +117,6 @@ class UI_UserList(QWidget):
 
 
 app = QApplication(sys.argv)
-window = UI_UserList()
+window = Ui_UserList()
 window.show()
 app.exec()

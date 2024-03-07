@@ -1,5 +1,3 @@
-
-
 class UserFields:
     def __init__(self,name,vector,rhr,disability,access = False):
         self._access = access

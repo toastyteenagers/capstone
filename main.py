@@ -1,42 +1,12 @@
-# import sys
-# from PyQt6 import QtWidgets, QtCore
-# from startup import Ui_LoadScreen
-# from initialConfigScreenOne import Ui_InitConfScreenOne
-# from mainInitialConfigScreen import Ui_InitConfMain
-#
-# if __name__ == "__main__":
-#     app = QtWidgets.QApplication(sys.argv)
-#
-#     LoadScreen = QtWidgets.QWidget()
-#     ui = Ui_LoadScreen()
-#     ui.setupUi(LoadScreen)
-#     LoadScreen.showFullScreen()
-#     QtCore.QTimer.singleShot(1000, ui.playStartupSound)
-#     LoadScreen.show()
-#
-#     stackedWidget = QtWidgets.QStackedWidget()
-#     InitConfScreenOne = QtWidgets.QWidget()
-#     ui_screen_one = Ui_InitConfScreenOne()
-#     ui_screen_one.setupUi(InitConfScreenOne, stackedWidget)
-#
-#     InitConfMain = QtWidgets.QWidget()
-#     ui_init_conf_main = Ui_InitConfMain()
-#     ui_init_conf_main.setupUi(InitConfMain)
-#
-#     stackedWidget.addWidget(InitConfScreenOne)
-#     stackedWidget.addWidget(InitConfMain)
-#     stackedWidget.showFullScreen()
-#
-#     sys.exit(app.exec())
-
 import sys
 from PyQt6 import QtWidgets, QtCore
-from startup import Ui_LoadScreen  # Assume this has the startup screen and sound
+from startup import Ui_LoadScreen
 from initialConfigScreenOne import Ui_InitConfScreenOne
 from mainInitialConfigScreen import Ui_InitConfMain
+from addUserScreen import Ui_addUserScreen
+# from userlist import Ui_UserList
 
-
-class MainApplication(QtWidgets.QWidget):
+class System(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
         self.stackedWidget = QtWidgets.QStackedWidget()
@@ -50,6 +20,7 @@ class MainApplication(QtWidgets.QWidget):
         self.setupStartupScreen()
         self.setupInitialConfigScreen()
         self.setupMainInitialConfigScreen()
+        self.setupAddUserScreen()
 
         self.showStartupScreen()
 
@@ -67,24 +38,33 @@ class MainApplication(QtWidgets.QWidget):
     def setupMainInitialConfigScreen(self):
         self.initConfMain = QtWidgets.QWidget()
         self.ui_initConfMain = Ui_InitConfMain()
-        # Assuming Ui_InitConfMain doesn't need stackedWidget for setup
-        self.ui_initConfMain.setupUi(self.initConfMain)
+        self.ui_initConfMain.setupUi(self.initConfMain, self.stackedWidget)
         self.stackedWidget.addWidget(self.initConfMain)
+        self.stackedWidget.setCurrentWidget(self.startupScreen)
     def showStartupScreen(self):
         self.stackedWidget.setCurrentWidget(self.startupScreen)
-        # Assume playStartupSound is a method in Ui_LoadScreen to play the sound
         QtCore.QTimer.singleShot(1000, self.ui_startup.playStartupSound)
-        # Transition to the next screen after some delay
-        QtCore.QTimer.singleShot(5000, self.showInitialConfigScreen)  # Adjust delay as needed
+        QtCore.QTimer.singleShot(5000, self.showInitialConfigScreen)
 
-    def showInitialConfigScreen(self):
+    def showInitialConfigScreen(self): # ok button screen
         self.stackedWidget.setCurrentWidget(self.initConfScreenOne)
 
-    def showMainInitialConfigScreen(self):
+    def showMainInitialConfigScreen(self): # first time set up steps
         self.stackedWidget.setCurrentWidget(self.initConfMain)
+
+    def setupAddUserScreen(self): # second step
+        self.addUserScreen = QtWidgets.QWidget()
+        self.ui_addUserScreen = Ui_addUserScreen()
+        self.ui_addUserScreen.setupUi(self.addUserScreen)
+        self.stackedWidget.addWidget(self.addUserScreen)
+
+    # def setupUserListScreen(self):
+    #     self.userListScreen = Ui_UserList()
+    #     self.stackedWidget.addWidget(self.userListScreen)
+
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    mainApp = MainApplication()
-    mainApp.showFullScreen()
+    programRun = System()
+    programRun.showFullScreen()
     sys.exit(app.exec())
