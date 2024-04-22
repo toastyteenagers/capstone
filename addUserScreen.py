@@ -3,6 +3,7 @@ from PyQt6.QtMultimedia import QCamera, QMediaCaptureSession
 from PyQt6.QtMultimediaWidgets import QVideoWidget
 from PyQt6.QtCore import QUrl
 from PyQt6 import QtCore, QtGui, QtWidgets
+from PyQt6.QtCore import QTimer
 
 class Ui_addUserScreen(object):
     def __init__(self):

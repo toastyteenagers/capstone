@@ -2,7 +2,7 @@ import sys
 import os
 from PyQt6 import QtWidgets, QtCore
 from startup import Ui_LoadScreen
-from initialConfigScreenOne import Ui_InitConfScreenOne
+from initialConfigScreenOne import Ui_InitConfScreenOneBG
 from mainInitialConfigScreen import Ui_InitConfMain
 from addUserScreen import Ui_addUserScreen
 from configparser import ConfigParser
@@ -35,10 +35,10 @@ class System(QtWidgets.QWidget):
         self.stackedWidget.addWidget(self.startupScreen)
 
     def setupInitialConfigScreen(self):
-        self.initConfScreenOne = QtWidgets.QWidget()
-        self.ui_initConfScreenOne = Ui_InitConfScreenOne()
-        self.ui_initConfScreenOne.setupUi(self.initConfScreenOne, self.stackedWidget)
-        self.stackedWidget.addWidget(self.initConfScreenOne)
+        self.initConfScreenOneBG = QtWidgets.QWidget()
+        self.ui_initConfScreenOneBG = Ui_InitConfScreenOneBG()
+        self.ui_initConfScreenOneBG.setupUi(self.initConfScreenOneBG, self.stackedWidget)
+        self.stackedWidget.addWidget(self.initConfScreenOneBG)
 
     def setupMainInitialConfigScreen(self):
         self.initConfMain = QtWidgets.QWidget()
@@ -53,7 +53,7 @@ class System(QtWidgets.QWidget):
         QtCore.QTimer.singleShot(5000, self.showInitialConfigScreen)
 
     def showInitialConfigScreen(self):  # ok button screen
-        self.stackedWidget.setCurrentWidget(self.initConfScreenOne)
+        self.stackedWidget.setCurrentWidget(self.initConfScreenOneBG)
 
     def showMainInitialConfigScreen(self):  # first time set up steps
         self.stackedWidget.setCurrentWidget(self.initConfMain)
