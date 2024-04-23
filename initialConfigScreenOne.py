@@ -95,12 +95,12 @@ class Ui_InitConfScreenOneBG(object):
         self.InitConfScreenOneButton.setText(_translate("InitConfScreenOneBG", "OK"))
 
 
-#if __name__ == "__main__":
-    #import sys
-    #app = QtWidgets.QApplication(sys.argv)
-    #InitConfScreenOneBG = QtWidgets.QWidget()
-    #ui = Ui_InitConfScreenOneBG()
-    #ui.setupUi(InitConfScreenOneBG)
-    #InitConfScreenOneBG.showFullScreen()
-    #InitConfScreenOneBG.show()
-    #sys.exit(app.exec())
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    InitConfScreenOneBG = QtWidgets.QWidget()
+    ui = Ui_InitConfScreenOneBG()
+    ui.setupUi(InitConfScreenOneBG)
+    InitConfScreenOneBG.showFullScreen()
+    InitConfScreenOneBG.show()
+    sys.exit(app.exec())
