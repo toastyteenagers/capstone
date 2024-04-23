@@ -1,7 +1,10 @@
 from datetime import datetime
 from marshmallow import Schema, fields, post_load
+import json
+import sqlite3
 
 
+# from test import add_database
 class newUser:
 
     def __init__(self, name, encodings, rhr, disability, level=0, uses=[], doc=datetime.now()):
@@ -14,10 +17,10 @@ class newUser:
         else:
             self.middle_name = ""
         self.encodings = encodings
-        self.avgHR = rhr
+        self.rhr = rhr
         self.disability = disability
         self.doc = doc
-        self.dateOfCreation = doc
+        # self.dateOfCreation = doc
         self.uses = uses
 
     def add_use(self):
@@ -36,8 +39,8 @@ class newUser:
     def get_encodings(self):
         return self.encodings
 
-    def get_avgHR(self):
-        return self.avgHR
+    def get_rhr(self):
+        return self.rhr
 
     def get_disability(self):
         if self.disability != 0:
@@ -46,7 +49,7 @@ class newUser:
             return "no"
 
     def get_dateOfCreation(self):
-        return self.dateOfCreation
+        return self.doc
 
     def get_use_history(self):
         return self.uses
@@ -66,8 +69,8 @@ class newUser:
     def set_encodings(self, encodings):
         self.encodings = encodings
 
-    def set_avgHR(self, rhr):
-        self.avgHR = rhr
+    def set_rhr(self, rhr):
+        self.rhr = rhr
 
     def set_disability(self, disability):
         self.disability = disability
@@ -112,10 +115,102 @@ def createUser(name, encodings, rhr, disability, level=0, uses=[], doc=datetime.
     }
     schema = UserSchema()
     user = schema.load(user_data)
-
+    # print(user.get_first_name())
     result = schema.dump(user)
     print(result)
+    add_to_database(result)
 
-# createUser("Owen", [1234], 95, 0)
-# user = UserSchema()
-# result = user.load("Owen", [1234], 95, 0)
+
+def add_to_database(data):
+    data['encodings'] = json.dumps(data['encodings'])
+    data['uses'] = json.dumps(data['uses'])
+
+    conn = sqlite3.connect('users.db')
+    c = conn.cursor()
+    c.execute("SELECT * FROM users WHERE encodings=?", (data['encodings'],))
+    if len(c.fetchall()) != 0:
+        print("Duplicate user will not be added to database")
+    else:
+        c.execute("INSERT INTO users VALUES (?,?,?,?,?,?,?)", (
+        data['name'], data['encodings'], data['rhr'], data['disability'], data['uses'], data['doc'], data['level']))
+
+    conn.commit()
+    conn.close()
+
+
+def search_database(encodings):
+    encodings = json.dumps(encodings)
+    conn = sqlite3.connect('users.db')
+    c = conn.cursor()
+    c.execute("SELECT * FROM users WHERE encodings=?", (encodings,))
+    print(c.fetchone())
+    conn.commit()
+    conn.close()
+
+
+def delete_from_database(name, encodings):
+    encodings = json.dumps(encodings)
+
+    conn = sqlite3.connect('users.db')
+    c = conn.cursor()
+    c.execute("DELETE from users WHERE name= ? AND encodings= ?", (name, encodings))
+    conn.commit()
+    conn.close()
+
+
+def load_users():
+    active_users = []
+    conn = sqlite3.connect('users.db')
+    c = conn.cursor()
+
+    c.execute("SELECT * FROM users")
+    users_in_database = c.fetchall()
+
+    for i in users_in_database:
+        schema = UserSchema()
+        user_data = {
+            "name": i[0],
+            "encodings": json.loads(i[1]),
+            "rhr": i[2],
+            "disability": i[3],
+            "level": i[6],
+            "uses": json.loads(i[4]),
+            "doc": i[5]
+        }
+
+        user = schema.load(user_data)
+        active_users.append(user)
+
+    conn.commit()
+    conn.close()
+
+    return active_users
+
+
+# createUser("Alex Ram", [1235], 95, 0)
+
+# conn = sqlite3.connect('users.db')
+# c = conn.cursor()
+
+# c.execute("SELECT * FROM users WHERE name='Owen'")
+
+# Comment out
+# c.execute("SELECT * FROM users")
+# print(c.fetchall())
+
+# delete_from_database('Alex', [1235])
+
+# c.execute("SELECT * FROM users")
+# print(c.fetchall())
+
+
+# search_database([1235])
+# fetchone
+# fetchall
+# fetchmany
+
+# conn.commit()
+# conn.close()
+
+
+#load_users()
