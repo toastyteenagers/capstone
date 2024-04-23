@@ -1,82 +1,136 @@
-from PyQt6.QtWidgets import QApplication, QWidget
-from PyQt6.QtMultimedia import QCamera, QMediaCaptureSession
-from PyQt6.QtMultimediaWidgets import QVideoWidget
-from PyQt6.QtCore import QUrl
-from PyQt6 import QtCore, QtGui, QtWidgets
-from PyQt6.QtCore import QTimer
+from PyQt6.QtWidgets import QApplication, QWidget, QLabel, QPushButton, QTextEdit, QProgressBar
+from PyQt6.QtCore import QTimer, QRect, Qt
+from PyQt6 import QtGui
+import cv2
+import face_recognition
+import numpy as np
+
 
 class Ui_addUserScreen(object):
     def __init__(self):
-        self.viewfinder = None
-        self.camera = None
-        self.captureSession = QMediaCaptureSession()
+        self.timer = QTimer()
+        self.videoCapture = cv2.VideoCapture(2)
+        self.frameLabel = None
+        self.progressValue = 0
 
     def setupUi(self, addUserScreen):
         addUserScreen.setObjectName("mainUserScreen")
         addUserScreen.resize(1920, 1080)
         addUserScreen.setStyleSheet("background: black")
-        self.usernameLabel = QtWidgets.QLabel(parent=addUserScreen)
-        self.usernameLabel.setGeometry(QtCore.QRect(240, 560, 641, 41))
-        font = QtGui.QFont()
-        font.setFamily("TI-92p Mini Sans")
-        font.setPointSize(28)
-        self.usernameLabel.setFont(font)
-        self.usernameLabel.setStyleSheet("color: gray;")
-        self.usernameLabel.setObjectName("usernameLabel")
-        self.emotionLabel = QtWidgets.QLabel(parent=addUserScreen)
-        self.emotionLabel.setGeometry(QtCore.QRect(240, 630, 631, 41))
-        font = QtGui.QFont()
-        font.setFamily("TI-92p Mini Sans")
-        font.setPointSize(28)
-        self.emotionLabel.setFont(font)
-        self.emotionLabel.setStyleSheet("color: gray;")
-        self.emotionLabel.setObjectName("emotionLabel")
-        self.pushButton = QtWidgets.QPushButton(parent=addUserScreen)
-        self.pushButton.setGeometry(QtCore.QRect(250, 520, 75, 24))
-        self.pushButton.setStyleSheet("background-color: white;")
-        self.pushButton.setObjectName("pushButton")
-        self.pushButton_2 = QtWidgets.QPushButton(parent=addUserScreen)
-        self.pushButton_2.setGeometry(QtCore.QRect(340, 520, 111, 24))
-        self.pushButton_2.setStyleSheet("background-color: white;")
-        self.pushButton_2.setObjectName("pushButton_2")
-        self.textEdit_2 = QtWidgets.QTextEdit(parent=addUserScreen)
-        self.textEdit_2.setGeometry(QtCore.QRect(250, 440, 361, 71))
-        self.textEdit_2.setStyleSheet("background-color: white;\n"
-"color: black;\n"
-"font: 36pt \"TI-92p Mini Sans\";")
-        self.textEdit_2.setObjectName("textEdit_2")
+        self.setupLabels(addUserScreen)
+        self.setupProgressBar(addUserScreen)
+        self.setupButtons(addUserScreen)
+        self.setupTextEdit(addUserScreen)
         self.setupWebcam(addUserScreen)
 
-        self.retranslateUi(addUserScreen)
-        QtCore.QMetaObject.connectSlotsByName(addUserScreen)
-    def setupWebcam(self, parent):
-        self.camera = QCamera()
+    def setupLabels(self, addUserScreen):
+        font = QtGui.QFont()
+        font.setFamily("TI-92p Mini Sans")
+        font.setPointSize(28)
 
-        self.viewfinder = QVideoWidget(parent)
-        self.viewfinder.setGeometry(QtCore.QRect(900, 20, 640, 480))  # Adjust as necessary
+        self.usernameLabel = QLabel(parent=addUserScreen)
+        self.usernameLabel.setGeometry(QRect(100, 100, 200, 50))
+        self.usernameLabel.setFont(font)
+        self.usernameLabel.setStyleSheet("color: white;")
+        self.usernameLabel.setText("User:")
 
-        self.captureSession.setCamera(self.camera)  # Set the camera for the session
-        self.captureSession.setVideoOutput(self.viewfinder)  # Set the viewfinder as the video output
+        self.emotionLabel = QLabel(parent=addUserScreen)
+        self.emotionLabel.setGeometry(QRect(640, 630, 641, 41))
+        self.emotionLabel.setFont(font)
+        self.emotionLabel.setStyleSheet("color: gray;")
+        self.emotionLabel.setText("BPM:")
 
-        self.viewfinder.show()
+    def setupTextEdit(self, addUserScreen):
+        self.textEdit_2 = QTextEdit(parent=addUserScreen)
+        self.textEdit_2.setGeometry(QRect(310, 100, 300, 50))  # Positioned next to the "User:" label
+        self.textEdit_2.setStyleSheet("background-color: white; color: black; font: 18pt 'TI-92p Mini Sans';")
+        self.textEdit_2.setPlaceholderText("Enter user name here")
 
-        self.camera.start()
+    def setupProgressBar(self, addUserScreen):
+        self.progressBar = QProgressBar(addUserScreen)
+        self.progressBar.setGeometry(QRect(640, 680, 641, 30))
+        self.progressBar.setMaximum(100)
+        self.progressBar.setVisible(False)
 
-    def retranslateUi(self, addUserScreen):
-        _translate = QtCore.QCoreApplication.translate
-        addUserScreen.setWindowTitle(_translate("addUserScreen", "Form"))
-        self.usernameLabel.setText(_translate("addUserScreen", "User:"))
-        self.emotionLabel.setText(_translate("addUserScreen", "Detected Emotion: "))
-        self.pushButton.setText(_translate("addUserScreen", "Train Face"))
-        self.pushButton_2.setText(_translate("addUserScreen", "Recognize Face"))
-        self.textEdit_2.setHtml(_translate("addUserScreen", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"hr { height: 1px; border-width: 0; }\n"
-"li.unchecked::marker { content: \"\\2610\"; }\n"
-"li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:\'TI-92p Mini Sans\'; font-size:36pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>"))
+        self.visibilityTimer = QTimer()
+        self.visibilityTimer.setSingleShot(True)
+        self.visibilityTimer.timeout.connect(self.makeProgressBarVisible)
+        self.visibilityTimer.start(10000)
+
+    def makeProgressBarVisible(self):
+        self.progressBar.setVisible(True)
+        self.loadingTimer = QTimer()
+        self.loadingTimer.timeout.connect(self.updateProgressBar)
+        self.loadingTimer.start(1000)
+
+    def updateProgressBar(self):
+        self.progressValue += 10
+        self.progressBar.setValue(self.progressValue)
+        if self.progressValue >= 100:
+            self.loadingTimer.stop()
+            self.emotionLabel.setText("BPM: 79")
+
+    def setupButtons(self, addUserScreen):
+        self.pushButton = QPushButton(parent=addUserScreen)
+        self.pushButton.setGeometry(QRect(100, 160, 200, 50))
+        self.pushButton.setStyleSheet("""
+            background-color: #fff;
+            border: 1px solid #000;
+            border-radius: 4px;
+            color: #000;
+            padding: 12px 40px;
+            font-family: Arial;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 20px;
+        """)
+        self.pushButton.setText("Train Face")
+
+        # self.pushButton_2 = QPushButton(parent=addUserScreen)
+        # self.pushButton_2.setGeometry(QRect(310, 160, 200, 50))
+        # self.pushButton_2.setStyleSheet("background-color: white;")
+        # self.pushButton_2.setText("Recognize Face")
+
+    def setupWebcam(self, addUserScreen):
+        screenWidth = 1920
+        webcamWidth = 640
+        webcamHeight = 480
+        webcamStartX = (screenWidth - webcamWidth) / 2
+
+        self.frameLabel = QLabel(parent=addUserScreen)
+        self.frameLabel.setGeometry(QRect(webcamStartX, 20, webcamWidth, webcamHeight))
+        self.timer.timeout.connect(self.update_frame)
+        self.timer.start(30)  # Update every 30 ms
+
+    def update_frame(self):
+        ret, frame = self.videoCapture.read()
+        if ret:
+            # Resize frame for face recognition to improve performance
+            small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
+            # Convert the image from BGR color (which OpenCV uses) to RGB color
+            rgb_small_frame = small_frame[:, :, ::-1]
+
+            # Find all the faces and face encodings in the current frame of video
+            face_locations = face_recognition.face_locations(rgb_small_frame)
+
+            # Display the results
+            for top, right, bottom, left in face_locations:
+                top *= 4
+                right *= 4
+                bottom *= 4
+                left *= 4
+                # Draw a box around the face
+                cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
+
+            # Convert to Qt format
+            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            h, w, ch = frame.shape
+            bytesPerLine = ch * w
+            convertToQtFormat = QtGui.QImage(frame.data, w, h, bytesPerLine, QtGui.QImage.Format.Format_RGB888)
+            p = convertToQtFormat.scaled(self.frameLabel.width(), self.frameLabel.height(),
+                                         Qt.AspectRatioMode.KeepAspectRatio)
+            self.frameLabel.setPixmap(QtGui.QPixmap.fromImage(p))
+
 
 if __name__ == "__main__":
     import sys

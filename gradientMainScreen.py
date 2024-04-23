@@ -48,7 +48,7 @@ class Ui_MainWindow(object):
         self.finalTextLabel = QtWidgets.QLabel(self.widget)
         self.finalTextLabel.setGeometry(QtCore.QRect(250, 560, 480, 50))
         self.finalTextLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-        self.finalTextLabel.setText("DURESS DETECTED. ACCESS DENIED.")
+        self.finalTextLabel.setText("Access Granted") #DURESS DETECTED. ACCESS DENIED. or "Access Granted
         self.finalTextLabel.setVisible(False)  # Initially hidden
 
         MainWindow.setCentralWidget(self.centralwidget)
@@ -60,7 +60,7 @@ class Ui_MainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
         # Setup camera
-        self.capture = cv2.VideoCapture(0)
+        self.capture = cv2.VideoCapture(2)
         self.timer = QTimer()
         self.timer.timeout.connect(self.update_frame)
         self.timer.start(30)
@@ -99,9 +99,9 @@ class Ui_MainWindow(object):
             if self.progressValue >= 100:
                 self.progressBarTimer.stop()
                 self.finalTextLabel.setVisible(True)
-                self.additionalTextLabel.setText("BPM: 99")
+                self.additionalTextLabel.setText("BPM: 75")
                 # Change background image of the MainWindow
-                self.widget.parent().setStyleSheet("background-image: url(:/images/images/Red BG.png);")
+                self.widget.parent().setStyleSheet("background-image: url(:/images/images/Green BG.png);")
             else:
                 self.progressValue += 1
                 self.progressBar.setValue(self.progressValue)
