@@ -8,6 +8,7 @@ import asyncio
 
 import resources
 #import RHR_Analysis
+import DoorControl
 import users
 
 class Ui_MainWindow(object):
@@ -138,9 +139,7 @@ class Ui_MainWindow(object):
                             if (RHR_Analysis.analyze(users.search_database(face_encoding))):
                                 self.textLabel.setText("Access Granted")
                                 #needs to show nice access granted and display rhr, as well as opening door.
-                                RHR_Analysis.openDoor()
-                                sleep(5)
-                                RHR_Analysis.closeDoor()
+                                DoorControl.OpenFor5()
 
             # Convert the frame to QImage format and display it in the cameraLabel
             rgb_image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)

@@ -106,19 +106,7 @@ async def analysis(beatList):
 #        digital13.value = False
 #        time.sleep(8)
 
-def openDoor():
-    board.digital[13].write(1)
 
-
-def closeDoor():
-    board.digital[13].write(0)
-
-
-def toggle():
-    if isDoorOpen == False:
-        openDoor()
-    else:
-        closeDoor()
 
 
 async def main():
