@@ -8,7 +8,7 @@ import asyncio
 
 import resources
 #import RHR_Analysis
-import DoorControl
+#import DoorControl
 import users
 
 class Ui_MainWindow(object):
