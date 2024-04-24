@@ -1,7 +1,6 @@
-#from users import newUser, administrator, createUser
-import sqlite3
 
-#conn = sqlite3.connect(':memory:')
+import sqlite3
+# this file needs to be run ONCE upon init.
 conn = sqlite3.connect('users.db')
 
 c = conn.cursor()
