@@ -1,0 +1,1 @@
+for i in {1..60}; do { echo "$( s=`sudo cat in_voltage0_input`; echo "$s" )" >> /home/team11/debug/voltage.txt; sleep 1; } ; done;

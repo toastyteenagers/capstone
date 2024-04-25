@@ -1,0 +1,10 @@
+#!/bin/bash
+
+sleep 1;
+while true;
+do
+    s=`sudo cat /sys/bus/i2c/devices/6-0040/iio:device0/in_voltage0_input`;
+    echo "$s";
+    sleep 1;
+done
+
