@@ -1,10 +1,10 @@
 import sys
 import cv2
 import face_recognition
-from PyQt6 import QtCore, QtGui, QtWidgets
-from PyQt6.QtCore import QTimer
-from PyQt6.QtGui import QPixmap, QImage
-import resources
+from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import QTimer
+from PyQt5.QtGui import QPixmap, QImage
+import resources  # Assuming 'resources' is a valid resource file
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -12,12 +12,12 @@ class Ui_MainWindow(object):
         MainWindow.resize(1920, 1080)
         MainWindow.setStyleSheet("background-image: url(:/images/images/Blue BG.png);")
 
-        self.centralwidget = QtWidgets.QWidget(parent=MainWindow)
+        self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
 
-        self.widget = QtWidgets.QWidget(parent=self.centralwidget)
+        self.widget = QtWidgets.QWidget(self.centralwidget)
         self.widget.setGeometry(QtCore.QRect(480, 20, 991, 901))
-        self.widget.setLayoutDirection(QtCore.Qt.LayoutDirection.LeftToRight)
+        self.widget.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.widget.setObjectName("widget")
 
         # QLabel for displaying the video frames
@@ -28,13 +28,13 @@ class Ui_MainWindow(object):
         # First QLabel for displaying text
         self.textLabel = QtWidgets.QLabel(self.widget)
         self.textLabel.setGeometry(QtCore.QRect(250, 400, 480, 50))
-        self.textLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.textLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.textLabel.setObjectName("textLabel")
 
         # Second QLabel for displaying additional text
         self.additionalTextLabel = QtWidgets.QLabel(self.widget)
         self.additionalTextLabel.setGeometry(QtCore.QRect(250, 460, 480, 50))
-        self.additionalTextLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.additionalTextLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.additionalTextLabel.setText("BPM:")
         self.additionalTextLabel.setObjectName("additionalTextLabel")
 
@@ -47,12 +47,12 @@ class Ui_MainWindow(object):
         # Third QLabel for displaying final text
         self.finalTextLabel = QtWidgets.QLabel(self.widget)
         self.finalTextLabel.setGeometry(QtCore.QRect(250, 560, 480, 50))
-        self.finalTextLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-        self.finalTextLabel.setText("Access Granted") #DURESS DETECTED. ACCESS DENIED. or "Access Granted
+        self.finalTextLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.finalTextLabel.setText("Access Granted") # Or "DURESS DETECTED. ACCESS DENIED."
         self.finalTextLabel.setVisible(False)  # Initially hidden
 
         MainWindow.setCentralWidget(self.centralwidget)
-        self.statusbar = QtWidgets.QStatusBar(parent=MainWindow)
+        self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
 
@@ -85,8 +85,8 @@ class Ui_MainWindow(object):
             rgb_image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             h, w, ch = rgb_image.shape
             bytes_per_line = ch * w
-            convert_to_Qt_format = QImage(rgb_image.data, w, h, bytes_per_line, QImage.Format.Format_RGB888)
-            p = convert_to_Qt_format.scaled(480, 360, QtCore.Qt.AspectRatioMode.KeepAspectRatio)
+            convert_to_Qt_format = QImage(rgb_image.data, w, h, bytes_per_line, QImage.Format_RGB888)
+            p = convert_to_Qt_format.scaled(480, 360, QtCore.Qt.KeepAspectRatio)
             self.cameraLabel.setPixmap(QPixmap.fromImage(p))
 
     def show_text(self):
