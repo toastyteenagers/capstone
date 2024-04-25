@@ -5,7 +5,6 @@ from startup import Ui_LoadScreen
 from initialConfigScreenOne import Ui_InitConfScreenOneBG
 from mainInitialConfigScreen import Ui_InitConfMain
 from testScreen import TestScreen
-
 class MainApplication(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
@@ -29,16 +28,16 @@ class MainApplication(QtWidgets.QWidget):
 
         # Main initial configuration screen setup
         self.mainInitConfScreen = QtWidgets.QWidget()
-        self.uiMainInitConfScreen = Ui_InitConfMain()
+        self.uiMainInitConfScreen = Ui_InitConfMain(parent=self.mainInitConfScreen)
         self.uiMainInitConfScreen.setupUi(self.mainInitConfScreen)
         self.stack.addWidget(self.mainInitConfScreen)
 
         # Test screens setup
-        self.testScreenAdmin = TestScreen(self.stack)
+        self.testScreenAdmin = TestScreen(self.uiMainInitConfScreen, self.stack)
         self.stack.addWidget(self.testScreenAdmin)
-        self.testScreenUser = TestScreen(self.stack)
+        self.testScreenUser = TestScreen(self.uiMainInitConfScreen, self.stack)
         self.stack.addWidget(self.testScreenUser)
-        self.testScreenAccessibility = TestScreen(self.stack)
+        self.testScreenAccessibility = TestScreen(self.uiMainInitConfScreen, self.stack)
         self.stack.addWidget(self.testScreenAccessibility)
 
         # Set layout only once
@@ -59,6 +58,7 @@ class MainApplication(QtWidgets.QWidget):
 
         # Connect the button in initial config screen one to trigger transition to the main initial config screen
         self.uiInitConfScreenOne.InitConfScreenOneButton.clicked.connect(self.showMainInitConfScreen)
+
 
     def showTestScreen(self, index):
         self.stack.setCurrentIndex(index)  # Use the index of the test screens

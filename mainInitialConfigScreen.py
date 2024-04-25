@@ -20,6 +20,17 @@ class HoverButton(QtWidgets.QPushButton):
         self.setText(self.default_text)
         self.setStyleSheet(self.default_style)
 class Ui_InitConfMain(object):
+
+    def __init__(self, parent=None, stackedWidget=None, gradientScreenIndex=None):
+        self.parent = parent
+        self.stackedWidget = stackedWidget
+        self.gradientScreenIndex = gradientScreenIndex
+        self.counter = 0
+        self.counterLabel = QtWidgets.QLabel("0/3", parent=self.parent)
+        self.counterLabel.setGeometry(QtCore.QRect((1920-200)//1, ((1080-50)//1) - 60, 200, 52))
+        self.counterLabel.setStyleSheet("color: white; font: 48pt 'TI-92p Mini Sans';")
+        self.counterLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.setupUi(parent)
     def setupUi(self, InitConfMain):
         InitConfMain.setObjectName("InitConfMain")
         InitConfMain.resize(1920, 1080)
@@ -72,6 +83,32 @@ class Ui_InitConfMain(object):
         # self.AddUserButton.setObjectName("AddUserButton")
         self.AccessibilityButton = HoverButton("- Accessibility", "Accessibility", parent=InitConfMain)
         self.AccessibilityButton.setGeometry(QtCore.QRect(90, 240, 261, 41))
+        # test counter label
+        self.counterLabel = QtWidgets.QLabel(parent=InitConfMain)
+        self.counterLabel.setGeometry(QtCore.QRect((1920-200)//1, ((1080-50)//1) - 60, 200, 52))  # Centering the label
+        self.counterLabel.setText("0/3")
+        self.counterLabel.setStyleSheet("color: white; font: 48pt 'TI-92p Mini Sans';")
+        self.counterLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.counterLabel.setObjectName("counterLabel")
+
+        self.counter = 0
+
+        # test hidden proceed button
+        self.ProceedButton = QtWidgets.QPushButton(parent=InitConfMain)
+        self.ProceedButton.setGeometry(QtCore.QRect((1920-200)//2, 1080-120, 200, 50))
+        self.ProceedButton.setText("Proceed")
+        self.ProceedButton.setStyleSheet("""background-color: #fff;
+            border: 1px solid #000;
+            border-radius: 4px;
+            color: #000;
+            padding: 12px 40px;
+            font-family: Arial;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 20px;""")
+        self.ProceedButton.setObjectName("ProceedButton")
+        self.ProceedButton.hide()
+        self.ProceedButton.clicked.connect(self.goToGradientScreen)
         # self.AccessibilityButton.setStyleSheet("color: white;\n""font: 28pt \"TI-92p Mini Sans\";")
         # self.AccessibilityButton.setObjectName("AccessibilityButton")
         self.topLeftLine.raise_()
@@ -98,6 +135,24 @@ class Ui_InitConfMain(object):
     def goToAccessibilityScreen(self):
         currentIndex = self.stackedWidget.currentIndex()
         self.stackedWidget.setCurrentIndex(self.stackedWidget.currentIndex() + 1)
+
+    def toggleProceedButton(self):
+        if self.ProceedButton.isHidden():
+            self.ProceedButton.show()
+        else:
+            self.ProceedButton.hide()
+
+    def incrementCount(self):
+        if self.counter < 3:
+            self.counter += 1
+            self.counterLabel.setText(f'{self.counter}/3')
+
+            if self.counter == 3:
+                self.toggleProceedButton()
+
+    def goToGradientScreen(self):
+        if self.gradientScreenIndex is not None:
+            self.stackedWidget.setCurrentIndex(self.gradientScreenIndex)
 
     def retranslateUi(self, InitConfMain):
         _translate = QtCore.QCoreApplication.translate

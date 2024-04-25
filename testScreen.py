@@ -1,27 +1,35 @@
 import sys
 from PyQt6 import QtCore, QtGui, QtWidgets
+#from mainInitialConfigScreen import Ui_InitConfMain
 
 class TestScreen(QtWidgets.QWidget):
-    def __init__(self, parent=None):
+    backClicked = QtCore.pyqtSignal()  # Signal to emit when back is clicked
+
+    def __init__(self, ui_init_conf_main, parent=None):
         super(TestScreen, self).__init__(parent)
+        self.ui_init_conf_main = ui_init_conf_main  # Assign the passed instance directly
         self.setupUi()
 
     def setupUi(self):
         self.setWindowTitle("Test Screen")
         layout = QtWidgets.QVBoxLayout(self)
 
+        # Label to indicate it's a test screen
         self.label = QtWidgets.QLabel("This is a Test Screen", self)
         self.label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(self.label)
 
-        # back button
+        # Button to go back to the main initial config screen
         self.backButton = QtWidgets.QPushButton("Back", self)
-        self.backButton.clicked.connect(self.on_back_clicked)
+        self.backButton.clicked.connect(self.onBackClicked)
         layout.addWidget(self.backButton)
 
-    def on_back_clicked(self):
+    def onBackClicked(self):
+        self.backClicked.emit()  # Emit the signal when back button is clicked
         if isinstance(self.parent(), QtWidgets.QStackedWidget):
-            self.parent().setCurrentIndex(2)
+            self.parent().setCurrentIndex(2)  # Correct index must be used here
+        self.ui_init_conf_main.incrementCount()  # Correctly refer to the passed instance method
+
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
