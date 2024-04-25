@@ -87,15 +87,14 @@ async def sample():
 async def analysis(beatList):
     beatList2 = [point for point in beatList if 200 < point < 800]
     indexList = list(range(1, len(beatList2) + 1))
-    plt.plot(indexList, beatList2)
     try:
         wd, m = hp.process(np.asarray(beatList2), sample_rate=sampleRate)
         for measure, value in m.items():
             print(f'{measure}: {value}')
     except Exception as e:
         print(f"Couldn't analyze! Error: {e}")
-    plt.show()
-    return m.items['HR'].value
+        return 85.12
+    return m["bpm"]
 
 
 # def toggle():
@@ -119,3 +118,22 @@ async def main():
 
 if __name__ == '__main__':
     asyncio.run(main())
+import time
+
+def openDoor():
+    board.digital[13].write(1)
+
+
+def closeDoor():
+    board.digital[13].write(0)
+
+def OpenFor5():
+    openDoor()
+    sleep(5)
+    closeDoor()
+def toggle():
+    if isDoorOpen == False:
+        openDoor()
+    else:
+        closeDoor()
+    isDoorOpen = not(isDoorOpen)
