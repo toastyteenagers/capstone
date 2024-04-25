@@ -1,24 +1,29 @@
-from PyQt6 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import *
+from PyQt5.QtGui import *
+from PyQt5.QtCore import *
+from PyQt5 import QtWidgets
 import sys
+import numpy as np
 
 from startup import Ui_LoadScreen
 from initialConfigScreenOne import Ui_InitConfScreenOneBG
 from mainInitialConfigScreen import Ui_InitConfMain
-from gradientMainScreen import Ui_gradientMainScreen
+# from gradientMainScreen import Ui_gradientMainScreen
 from testScreen import TestScreen
-class MainApplication(QtWidgets.QWidget):
+
+
+class MainApplication(QWidget):
     def __init__(self):
-        super().__init__()
+        super(MainApplication, self).__init__()
         self.initUI()
 
     def initUI(self):
-        self.stack = QtWidgets.QStackedWidget()  # Stacked widget to manage screens
+        self.stack = QtWidgets.QStackedWidget()
 
-        # Loading screen setup
         self.loadScreen = QtWidgets.QWidget()
         self.uiLoadScreen = Ui_LoadScreen()
         self.uiLoadScreen.setupUi(self.loadScreen)
-        self.uiLoadScreen.playStartupSound()
+        # self.uiLoadScreen.playStartupSound()
         self.stack.addWidget(self.loadScreen)
 
         # initial config screen one setup (the one with 'ok' button)
@@ -42,10 +47,10 @@ class MainApplication(QtWidgets.QWidget):
         self.stack.addWidget(self.testScreenAccessibility)
 
         # gradient main screen setup (that must come from pressing 'proceed')
-        self.gradientMainScreen = QtWidgets.QWidget
-        self.uiGradientMainScreen = Ui_gradientMainScreen()
-        self.uiGradientMainScreen.setupUi(self.gradientMainScreen)
-        self.stack.addWidget(self.gradientMainScreen)
+        # self.gradientMainScreen = QtWidgets.QWidget
+        # self.uiGradientMainScreen = Ui_gradientMainScreen()
+        # self.uiGradientMainScreen.setupUi(self.gradientMainScreen)
+        # self.stack.addWidget(self.gradientMainScreen)
 
         # Set layout only once
         self.setLayout(QtWidgets.QVBoxLayout())
@@ -53,7 +58,7 @@ class MainApplication(QtWidgets.QWidget):
         self.stack.setCurrentWidget(self.loadScreen)
 
         # Timer for automatic transition from load screen to initial config screen
-        self.transitionTimer = QtCore.QTimer(self)
+        self.transitionTimer = QTimer(self)
         self.transitionTimer.setSingleShot(True)
         self.transitionTimer.timeout.connect(self.showInitConfScreen)
         self.transitionTimer.start(5000)  # 5 seconds to show load screen
@@ -67,7 +72,6 @@ class MainApplication(QtWidgets.QWidget):
         # Connect the button in initial config screen one to trigger transition to the main initial config screen
         self.uiInitConfScreenOne.InitConfScreenOneButton.clicked.connect(self.showMainInitConfScreen)
 
-
     def showTestScreen(self, index):
         self.stack.setCurrentIndex(index)  # Use the index of the test screens
 
@@ -77,8 +81,9 @@ class MainApplication(QtWidgets.QWidget):
     def showMainInitConfScreen(self):
         self.stack.setCurrentWidget(self.mainInitConfScreen)
 
-    def showGradientMainScreen(self):
-        self.stack.setCurrentWidget(self.gradientMainScreen)
+    # def showGradientMainScreen(self):
+    #    self.stack.setCurrentWidget(self.gradientMainScreen)
+
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)

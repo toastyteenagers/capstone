@@ -1,11 +1,14 @@
+from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import *
+from PyQt5.QtGui import *
+from PyQt5.QtCore import *
 import sys
-from PyQt6 import QtCore, QtGui, QtWidgets
-#from mainInitialConfigScreen import Ui_InitConfMain
+import numpy as np
 
 class TestScreen(QtWidgets.QWidget):
     backClicked = QtCore.pyqtSignal()  # Signal to emit when back is clicked
 
-    def __init__(self, ui_init_conf_main, parent=None):
+    def __init__(self, ui_init_conf_main=None, parent=None):
         super(TestScreen, self).__init__(parent)
         self.ui_init_conf_main = ui_init_conf_main  # Assign the passed instance directly
         self.setupUi()
@@ -35,4 +38,4 @@ if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     window = TestScreen()
     window.show()
-    sys.exit(app.exec())
+    sys.exit(app.exec_())
