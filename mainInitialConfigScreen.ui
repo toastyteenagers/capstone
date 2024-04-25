@@ -16,12 +16,12 @@
   <property name="styleSheet">
    <string notr="true">background-color: black;</string>
   </property>
-  <widget class="Line" name="line_5">
+  <widget class="Line" name="topRightLine">
    <property name="geometry">
     <rect>
-     <x>1400</x>
-     <y>10</y>
-     <width>511</width>
+     <x>1290</x>
+     <y>30</y>
+     <width>621</width>
      <height>21</height>
     </rect>
    </property>
@@ -32,7 +32,7 @@
     <enum>Qt::Horizontal</enum>
    </property>
   </widget>
-  <widget class="Line" name="line_4">
+  <widget class="Line" name="bottomLine">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -48,13 +48,13 @@
     <enum>Qt::Horizontal</enum>
    </property>
   </widget>
-  <widget class="Line" name="line_3">
+  <widget class="Line" name="rightLine">
    <property name="geometry">
     <rect>
      <x>1890</x>
-     <y>10</y>
+     <y>30</y>
      <width>21</width>
-     <height>1031</height>
+     <height>1011</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -64,13 +64,13 @@
     <enum>Qt::Vertical</enum>
    </property>
   </widget>
-  <widget class="Line" name="line_2">
+  <widget class="Line" name="leftLine">
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>10</y>
+     <y>30</y>
      <width>21</width>
-     <height>1031</height>
+     <height>1011</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -80,12 +80,12 @@
     <enum>Qt::Vertical</enum>
    </property>
   </widget>
-  <widget class="Line" name="line">
+  <widget class="Line" name="topLeftLine">
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>10</y>
-     <width>521</width>
+     <y>30</y>
+     <width>621</width>
      <height>21</height>
     </rect>
    </property>
@@ -96,12 +96,12 @@
     <enum>Qt::Horizontal</enum>
    </property>
   </widget>
-  <widget class="QLabel" name="label">
+  <widget class="QLabel" name="InitConfTitle">
    <property name="geometry">
     <rect>
-     <x>550</x>
+     <x>640</x>
      <y>10</y>
-     <width>831</width>
+     <width>651</width>
      <height>51</height>
     </rect>
    </property>
@@ -121,9 +121,9 @@
   <widget class="QPushButton" name="AdminControlsButton">
    <property name="geometry">
     <rect>
-     <x>80</x>
+     <x>90</x>
      <y>80</y>
-     <width>431</width>
+     <width>321</width>
      <height>41</height>
     </rect>
    </property>
@@ -138,9 +138,9 @@ font: 28pt &quot;TI-92p Mini Sans&quot;;</string>
   <widget class="QPushButton" name="AddUserButton">
    <property name="geometry">
     <rect>
-     <x>80</x>
+     <x>90</x>
      <y>160</y>
-     <width>281</width>
+     <width>201</width>
      <height>41</height>
     </rect>
    </property>
@@ -155,9 +155,9 @@ font: 28pt &quot;TI-92p Mini Sans&quot;;</string>
   <widget class="QPushButton" name="AccessiblilityButton">
    <property name="geometry">
     <rect>
-     <x>80</x>
+     <x>90</x>
      <y>240</y>
-     <width>411</width>
+     <width>261</width>
      <height>41</height>
     </rect>
    </property>
@@ -169,12 +169,12 @@ font: 28pt &quot;TI-92p Mini Sans&quot;;</string>
     <string>- Accessibility</string>
    </property>
   </widget>
-  <zorder>line</zorder>
-  <zorder>line_5</zorder>
-  <zorder>line_4</zorder>
-  <zorder>line_3</zorder>
-  <zorder>line_2</zorder>
-  <zorder>label</zorder>
+  <zorder>topLeftLine</zorder>
+  <zorder>topRightLine</zorder>
+  <zorder>bottomLine</zorder>
+  <zorder>rightLine</zorder>
+  <zorder>leftLine</zorder>
+  <zorder>InitConfTitle</zorder>
   <zorder>AdminControlsButton</zorder>
   <zorder>AddUserButton</zorder>
   <zorder>AccessiblilityButton</zorder>

@@ -2,7 +2,6 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 from PyQt6.QtMultimedia import QSoundEffect
 from PyQt6.QtCore import QUrl, QPropertyAnimation, QEasingCurve
 from PyQt6.QtWidgets import QGraphicsOpacityEffect
-
 import resources
 
 
@@ -44,7 +43,7 @@ class Ui_LoadScreen(object):
         self.startup_sound_effect = QSoundEffect()
         self.startup_sound_effect.setSource(QUrl.fromLocalFile(filename))
 
-        self.startup_sound_effect.setVolume(0.25)
+        self.startup_sound_effect.setVolume(0.35)
 
         self.startup_sound_effect.setLoopCount(1)
 
@@ -69,5 +68,7 @@ if __name__ == "__main__":
     LoadScreen = QtWidgets.QWidget()
     ui = Ui_LoadScreen()
     ui.setupUi(LoadScreen)
+    ui.playStartupSound()
+    LoadScreen.showFullScreen()
     LoadScreen.show()
     sys.exit(app.exec())

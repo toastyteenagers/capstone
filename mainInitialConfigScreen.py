@@ -114,5 +114,6 @@ if __name__ == "__main__":
     InitConfMain = QtWidgets.QWidget()
     ui = Ui_InitConfMain()
     ui.setupUi(InitConfMain)
+    InitConfMain.showFullScreen()
     InitConfMain.show()
     sys.exit(app.exec())
