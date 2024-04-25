@@ -215,6 +215,16 @@ def search_database(encodings):
     conn.commit()
     conn.close()
 
+def search_passwords(password):
+    conn = sqlite3.connect('admins.db')
+    c = conn.cursor()
+    c.execute("SELECT * FROM admins WHERE password=?", (password,))
+    if c.fetchone():
+        return True
+    conn.commit()
+    conn.close()
+    return False
+
 
 def delete_from_database(name, encodings):
     encodings = json.dumps(encodings)
