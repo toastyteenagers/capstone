@@ -98,7 +98,7 @@ class Ui_InitConfScreenOneBG(object):
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    InitConfScreenOneBG = QtWidgets.QWidget()
+    InitConfScreenOneBG = QtWidgets.QMainWindow()
     ui = Ui_InitConfScreenOneBG()
     ui.setupUi(InitConfScreenOneBG)
     InitConfScreenOneBG.showFullScreen()

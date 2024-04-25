@@ -6,13 +6,13 @@ from PyQt5.QtCore import QTimer
 from PyQt5.QtGui import QPixmap, QImage
 import resources  # Assuming 'resources' is a valid resource file
 
-class Ui_MainWindow(object):
-    def setupUi(self, MainWindow):
-        MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1920, 1080)
-        MainWindow.setStyleSheet("background-image: url(:/images/images/Blue BG.png);")
+class Ui_gradientMainScreen(object):
+    def setupUi(self, gradientMainScreen):
+        gradientMainScreen.setObjectName("gradientMainScreen")
+        gradientMainScreen.resize(1920, 1080)
+        gradientMainScreen.setStyleSheet("background-image: url(:/images/images/Blue BG.png);")
 
-        self.centralwidget = QtWidgets.QWidget(MainWindow)
+        self.centralwidget = QtWidgets.QWidget(gradientMainScreen)
         self.centralwidget.setObjectName("centralwidget")
 
         self.widget = QtWidgets.QWidget(self.centralwidget)
@@ -51,13 +51,13 @@ class Ui_MainWindow(object):
         self.finalTextLabel.setText("Access Granted") # Or "DURESS DETECTED. ACCESS DENIED."
         self.finalTextLabel.setVisible(False)  # Initially hidden
 
-        MainWindow.setCentralWidget(self.centralwidget)
-        self.statusbar = QtWidgets.QStatusBar(MainWindow)
+        gradientMainScreen.setCentralWidget(self.centralwidget)
+        self.statusbar = QtWidgets.QStatusBar(gradientMainScreen)
         self.statusbar.setObjectName("statusbar")
-        MainWindow.setStatusBar(self.statusbar)
+        gradientMainScreen.setStatusBar(self.statusbar)
 
-        self.retranslateUi(MainWindow)
-        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        self.retranslateUi(gradientMainScreen)
+        QtCore.QMetaObject.connectSlotsByName(gradientMainScreen)
 
         # Setup camera
         self.capture = cv2.VideoCapture(2)
@@ -100,22 +100,22 @@ class Ui_MainWindow(object):
                 self.progressBarTimer.stop()
                 self.finalTextLabel.setVisible(True)
                 self.additionalTextLabel.setText("BPM: 75")
-                # Change background image of the MainWindow
+                # Change background image of the gradientMainScreen
                 self.widget.parent().setStyleSheet("background-image: url(:/images/images/Green BG.png);")
             else:
                 self.progressValue += 1
                 self.progressBar.setValue(self.progressValue)
 
-    def retranslateUi(self, MainWindow):
+    def retranslateUi(self, gradientMainScreen):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Face Recognition Viewer"))
+        gradientMainScreen.setWindowTitle(_translate("gradientMainScreen", "Face Recognition Viewer"))
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
+    gradientMainScreen = QtWidgets.QMainWindow()
+    ui = Ui_gradientMainScreen()
+    ui.setupUi(gradientMainScreen)
+    gradientMainScreen.show()
     sys.exit(app.exec())
 
 # import sys

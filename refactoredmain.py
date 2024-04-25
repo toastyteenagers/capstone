@@ -4,6 +4,7 @@ import sys
 from startup import Ui_LoadScreen
 from initialConfigScreenOne import Ui_InitConfScreenOneBG
 from mainInitialConfigScreen import Ui_InitConfMain
+from gradientMainScreen import Ui_gradientMainScreen
 from testScreen import TestScreen
 class MainApplication(QtWidgets.QWidget):
     def __init__(self):
@@ -20,25 +21,31 @@ class MainApplication(QtWidgets.QWidget):
         self.uiLoadScreen.playStartupSound()
         self.stack.addWidget(self.loadScreen)
 
-        # Initial configuration screen setup
+        # initial config screen one setup (the one with 'ok' button)
         self.initConfScreenOne = QtWidgets.QWidget()
         self.uiInitConfScreenOne = Ui_InitConfScreenOneBG()
         self.uiInitConfScreenOne.setupUi(self.initConfScreenOne)
         self.stack.addWidget(self.initConfScreenOne)
 
-        # Main initial configuration screen setup
+        # main initial config screen setup (the one with 'admin controls', 'add user', 'accessibility')
         self.mainInitConfScreen = QtWidgets.QWidget()
         self.uiMainInitConfScreen = Ui_InitConfMain(parent=self.mainInitConfScreen)
         self.uiMainInitConfScreen.setupUi(self.mainInitConfScreen)
         self.stack.addWidget(self.mainInitConfScreen)
 
-        # Test screens setup
+        # Test screens setup (will change drastically)
         self.testScreenAdmin = TestScreen(self.uiMainInitConfScreen, self.stack)
         self.stack.addWidget(self.testScreenAdmin)
         self.testScreenUser = TestScreen(self.uiMainInitConfScreen, self.stack)
         self.stack.addWidget(self.testScreenUser)
         self.testScreenAccessibility = TestScreen(self.uiMainInitConfScreen, self.stack)
         self.stack.addWidget(self.testScreenAccessibility)
+
+        # gradient main screen setup (that must come from pressing 'proceed')
+        self.gradientMainScreen = QtWidgets.QWidget
+        self.uiGradientMainScreen = Ui_gradientMainScreen()
+        self.uiGradientMainScreen.setupUi(self.gradientMainScreen)
+        self.stack.addWidget(self.gradientMainScreen)
 
         # Set layout only once
         self.setLayout(QtWidgets.QVBoxLayout())
@@ -55,6 +62,7 @@ class MainApplication(QtWidgets.QWidget):
         self.uiMainInitConfScreen.AdminControlsButton.clicked.connect(lambda: self.showTestScreen(3))
         self.uiMainInitConfScreen.AddUserButton.clicked.connect(lambda: self.showTestScreen(4))
         self.uiMainInitConfScreen.AccessibilityButton.clicked.connect(lambda: self.showTestScreen(5))
+        self.uiMainInitConfScreen.ProceedButton.clicked.connect(lambda: self.showGradientMainScreen(6))
 
         # Connect the button in initial config screen one to trigger transition to the main initial config screen
         self.uiInitConfScreenOne.InitConfScreenOneButton.clicked.connect(self.showMainInitConfScreen)
@@ -68,6 +76,9 @@ class MainApplication(QtWidgets.QWidget):
 
     def showMainInitConfScreen(self):
         self.stack.setCurrentWidget(self.mainInitConfScreen)
+
+    def showGradientMainScreen(self):
+        self.stack.setCurrentWidget(self.gradientMainScreen)
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)

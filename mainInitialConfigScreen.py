@@ -21,10 +21,9 @@ class HoverButton(QtWidgets.QPushButton):
         self.setStyleSheet(self.default_style)
 class Ui_InitConfMain(object):
 
-    def __init__(self, parent=None, stackedWidget=None, gradientScreenIndex=None):
+    def __init__(self, parent=None, stackedWidget=None):
         self.parent = parent
         self.stackedWidget = stackedWidget
-        self.gradientScreenIndex = gradientScreenIndex
         self.counter = 0
         self.counterLabel = QtWidgets.QLabel("0/3", parent=self.parent)
         self.counterLabel.setGeometry(QtCore.QRect((1920-200)//1, ((1080-50)//1) - 60, 200, 52))
@@ -108,7 +107,6 @@ class Ui_InitConfMain(object):
             line-height: 20px;""")
         self.ProceedButton.setObjectName("ProceedButton")
         self.ProceedButton.hide()
-        self.ProceedButton.clicked.connect(self.goToGradientScreen)
         # self.AccessibilityButton.setStyleSheet("color: white;\n""font: 28pt \"TI-92p Mini Sans\";")
         # self.AccessibilityButton.setObjectName("AccessibilityButton")
         self.topLeftLine.raise_()
@@ -142,6 +140,10 @@ class Ui_InitConfMain(object):
         else:
             self.ProceedButton.hide()
 
+    def goToGradientMainScreen(self):
+        currentIndex = self.stackedWidget.currentIndex()
+        self.stackedWidget.setCurrentIndex(self.stackedWidget.currentIndex() + 1)
+
     def incrementCount(self):
         if self.counter < 3:
             self.counter += 1
@@ -150,10 +152,6 @@ class Ui_InitConfMain(object):
             if self.counter == 3:
                 self.toggleProceedButton()
 
-    def goToGradientScreen(self):
-        if self.gradientScreenIndex is not None:
-            self.stackedWidget.setCurrentIndex(self.gradientScreenIndex)
-
     def retranslateUi(self, InitConfMain):
         _translate = QtCore.QCoreApplication.translate
         InitConfMain.setWindowTitle(_translate("InitConfMain", "Form"))
@@ -161,6 +159,7 @@ class Ui_InitConfMain(object):
         self.AdminControlsButton.setText(_translate("InitConfMain", "- Admin Controls"))
         self.AddUserButton.setText(_translate("InitConfMain", "- Add User"))
         self.AccessibilityButton.setText(_translate("InitConfMain", "- Accessibility"))
+        self.ProceedButton.setText(_translate("InitConfMain", "Proceed"))
 
 
 if __name__ == "__main__":
