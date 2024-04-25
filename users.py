@@ -322,4 +322,8 @@ def load_admins():
 # fetchmany
 
 
+<<<<<<< HEAD
 load_users()
+=======
+load_users()
+>>>>>>> 00fc302387b3f16b32d4fad167c3cced873392e0

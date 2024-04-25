@@ -1,15 +1,16 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
-from PyQt5.QtMultimedia import *
-from PyQt5.QtMultimediaWidgets import *
+#from PyQt5.QtMultimedia import *
+#from PyQt5.QtMultimediaWidgets import *
 from PyQt5.QtCore import *
 from PyQt5 import QtWidgets, QtCore
 import sys
 import cv2
 import face_recognition
 import numpy as np
+import asyncio 
 from users import createUser
-
+import RHR_Analysis
 Camera_X = 640
 Camera_Y = 480
 Camera_W = 640
@@ -63,7 +64,7 @@ class AddUserScreen(QWidget):
         self.input_name = QLabel(self.name)
         self.rightLayout.addRow(self.addNameButton, self.input_name)
 
-        self.rhrText = QLabel("Resting Heart Heart Rate: ")
+        self.rhrText = QLabel("Resting Heart Rate: ")
         self.heartRateButton = QPushButton('Start Input')
         self.heartRateButton.clicked.connect(self.add_rhr)
         self.inputLayout.addRow(self.rhrText, self.heartRateButton)
@@ -113,6 +114,11 @@ class AddUserScreen(QWidget):
 
     def add_rhr(self):
         print('need to inplement rhr method')
+        beatList = asyncio.run(RHR_Analysis.sample())
+        rhr = asyncio.run(RHR_Analysis.analysis(beatList))
+        print(rhr)
+        self.rhr = rhr
+        return rhr
 
     def add_disability(self):
         print('Need to add implementation of other disabilities')
@@ -140,28 +146,30 @@ class Worker1(QThread):
         self.window = window
         self.take_encoding = False
     ImageUpdate = pyqtSignal(QImage)
+    
     def run(self):
-        #can get rid of thread active
         self.ThreadActive = True
         Capture = cv2.VideoCapture(0)
         while self.ThreadActive:
             ret, frame = Capture.read()
-            if self.take_encoding == True:
+            if self.take_encoding:
                 face_locations = face_recognition.face_locations(frame)
-                for (top, right, bottom, left) in face_locations:
+                face_encodings = face_recognition.face_encodings(frame, face_locations)
+                for face_location, face_encoding in zip(face_locations, face_encodings):
+                    print("face encoding: "+str(face_encoding))
+                    top, right, bottom, left = face_location
                     face_image = frame[top:bottom, left:right]
-                    face_encodings = face_recognition.face_encodings(frame,face_locations)
-                    #print("Face Encodings: ", face_encodings)
-                    flat_encodings = np.concatenate(face_encodings).tolist()
-                    #print("flattened: ", flat_encodings)
-                    self.window.encodings = flat_encodings
-                    self.take_encoding = False
+                    flat_encoding = face_encoding.tolist()
+                    print("face encoding list: "+str(flat_encoding))
+                    self.window.encodings = flat_encoding
+                self.take_encoding = False
             if ret:
                 Image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                FlippedImage = cv2.flip(Image,1)
+                FlippedImage = cv2.flip(Image, 1)
                 ConvertToQtFormat = QImage(FlippedImage.data, Image.shape[1], Image.shape[0], QImage.Format_RGB888)
                 Pic = ConvertToQtFormat.scaled(Camera_W, Camera_H, Qt.KeepAspectRatio)
                 self.ImageUpdate.emit(Pic)
+    
     def stop(self):
         self.ThreadActive = False
         self.quit()
