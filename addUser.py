@@ -38,7 +38,6 @@ class AddUserScreen(QWidget):
         self.leftLayout = QVBoxLayout()
         self.inputLayout = QFormLayout()
         self.rightLayout = QFormLayout()
-        #self.layout.setGeometry(0,0,1920,1080)
         QApplication.setFont(self.font, "QLabel")
 
         self.Worker1 = Worker1(self)
