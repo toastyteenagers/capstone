@@ -8,8 +8,9 @@ import numpy as np
 from startup import Ui_LoadScreen
 from initialConfigScreenOne import Ui_InitConfScreenOneBG
 from mainInitialConfigScreen import Ui_InitConfMain
-# from gradientMainScreen import Ui_gradientMainScreen
+from gradientMainScreen import Ui_gradientMainScreen
 from testScreen import TestScreen
+from addUser import AddUserScreen
 
 
 class MainApplication(QWidget):
@@ -41,16 +42,16 @@ class MainApplication(QWidget):
         # Test screens setup (will change drastically)
         self.testScreenAdmin = TestScreen(self.uiMainInitConfScreen, self.stack)
         self.stack.addWidget(self.testScreenAdmin)
-        self.testScreenUser = TestScreen(self.uiMainInitConfScreen, self.stack)
+        self.testScreenUser = AddUserScreen(self.uiMainInitConfScreen, self.stack)
         self.stack.addWidget(self.testScreenUser)
         self.testScreenAccessibility = TestScreen(self.uiMainInitConfScreen, self.stack)
         self.stack.addWidget(self.testScreenAccessibility)
 
         # gradient main screen setup (that must come from pressing 'proceed')
-        # self.gradientMainScreen = QtWidgets.QWidget
-        # self.uiGradientMainScreen = Ui_gradientMainScreen()
-        # self.uiGradientMainScreen.setupUi(self.gradientMainScreen)
-        # self.stack.addWidget(self.gradientMainScreen)
+        self.gradientMainScreen = QtWidgets.QMainWindow()
+        self.uiGradientMainScreen = Ui_gradientMainScreen()
+        self.uiGradientMainScreen.setupUi(self.gradientMainScreen)
+        self.stack.addWidget(self.gradientMainScreen)
 
         # Set layout only once
         self.setLayout(QtWidgets.QVBoxLayout())
@@ -67,10 +68,12 @@ class MainApplication(QWidget):
         self.uiMainInitConfScreen.AdminControlsButton.clicked.connect(lambda: self.showTestScreen(3))
         self.uiMainInitConfScreen.AddUserButton.clicked.connect(lambda: self.showTestScreen(4))
         self.uiMainInitConfScreen.AccessibilityButton.clicked.connect(lambda: self.showTestScreen(5))
-        self.uiMainInitConfScreen.ProceedButton.clicked.connect(lambda: self.showGradientMainScreen(6))
+        #self.uiMainInitConfScreen.ProceedButton.clicked.connect(self.showGradientMainScreen)
+        #self.uiMainInitConfScreen.ProceedButton.clicked.connect(lambda: self.showGradientMainScreen(6))
 
         # Connect the button in initial config screen one to trigger transition to the main initial config screen
         self.uiInitConfScreenOne.InitConfScreenOneButton.clicked.connect(self.showMainInitConfScreen)
+        self.uiMainInitConfScreen.ProceedButton.clicked.connect(self.showGradientMainScreen)
 
     def showTestScreen(self, index):
         self.stack.setCurrentIndex(index)  # Use the index of the test screens
@@ -81,8 +84,10 @@ class MainApplication(QWidget):
     def showMainInitConfScreen(self):
         self.stack.setCurrentWidget(self.mainInitConfScreen)
 
-    # def showGradientMainScreen(self):
-    #    self.stack.setCurrentWidget(self.gradientMainScreen)
+    def showGradientMainScreen(self):
+        self.stack.setCurrentWidget(self.gradientMainScreen)
+
+
 
 
 if __name__ == "__main__":

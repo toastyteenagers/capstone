@@ -111,6 +111,7 @@ class Ui_InitConfMain(object):
             line-height: 20px;""")
         self.ProceedButton.setObjectName("ProceedButton")
         self.ProceedButton.hide()
+        #self.ProceedButton.clicked.connect(self.goToGradientMainScreen)
         # self.AccessibilityButton.setStyleSheet("color: white;\n""font: 28pt \"TI-92p Mini Sans\";")
         # self.AccessibilityButton.setObjectName("AccessibilityButton")
         self.topLeftLine.raise_()

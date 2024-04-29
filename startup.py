@@ -3,6 +3,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5 import QtWidgets, QtCore
 import sys
+import resources
 import numpy as np
 
 class Ui_LoadScreen(object):

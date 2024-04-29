@@ -115,5 +115,4 @@ if __name__ == "__main__":
     ui = Ui_InitConfScreenOneBG()
     ui.setupUi(InitConfScreenOneBG)
     InitConfScreenOneBG.showFullScreen()
-    InitConfScreenOneBG.show()
     sys.exit(app.exec_())
