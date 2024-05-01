@@ -1,5 +1,5 @@
 # from the information found in this paper: https://www.researchgate.net/figure/Distribution-of-average-daily-resting-heart-rates-The-average-daily-RHR-for-57-836_fig2_339061433
-
+print("I'm being imported")
 import UserFields
 import asyncio
 import concurrent.futures
@@ -27,6 +27,7 @@ totalNeededSamples = 5000  # amount needed for analysis
 baud = 9600
 # analog = Serial.Serial(port="/dev/ttyACM0",baudrate=baud,timeout=1)
 board = pyfirmata.Arduino("/dev/ttyACM0")
+board.digital[13].mode = pyfirmata.OUTPUT
 it = pyfirmata.util.Iterator(board)
 it.start()
 analog = board.get_pin("a:0:i")
@@ -109,22 +110,25 @@ async def analysis(beatList):
 
 
 async def main():
-    beatList = await sample()
-    await analysis(beatList)
-    openDoor()
-    time.sleep(8)
-    closeDoor()
+    pass
 
 
 if __name__ == '__main__':
     asyncio.run(main())
+    
 import time
 
 def openDoor():
+    global board
+    #halt analog readings
+    #then write to the pin
+    #then resume
+    #board.iterate()
     board.digital[13].write(1)
 
 
 def closeDoor():
+    global board
     board.digital[13].write(0)
 
 def OpenFor5():

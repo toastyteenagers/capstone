@@ -12,10 +12,12 @@ from gradientMainScreen import Ui_gradientMainScreen
 from testScreen import TestScreen
 from addUser import AddUserScreen
 
+from RHR_Analysis2 import RHR_Analysis_LIB
 
 class MainApplication(QWidget):
-    def __init__(self):
+    def __init__(self, RHR_Object):
         super(MainApplication, self).__init__()
+        self.RHR_Object = RHR_Object
         self.initUI()
 
     def initUI(self):
@@ -42,14 +44,14 @@ class MainApplication(QWidget):
         # Test screens setup (will change drastically)
         self.testScreenAdmin = TestScreen(self.uiMainInitConfScreen, self.stack)
         self.stack.addWidget(self.testScreenAdmin)
-        self.testScreenUser = AddUserScreen(self.uiMainInitConfScreen, self.stack)
+        self.testScreenUser = AddUserScreen(self.uiMainInitConfScreen, self.RHR_Object, self.stack)
         self.stack.addWidget(self.testScreenUser)
         self.testScreenAccessibility = TestScreen(self.uiMainInitConfScreen, self.stack)
         self.stack.addWidget(self.testScreenAccessibility)
 
         # gradient main screen setup (that must come from pressing 'proceed')
         self.gradientMainScreen = QtWidgets.QMainWindow()
-        self.uiGradientMainScreen = Ui_gradientMainScreen()
+        self.uiGradientMainScreen = Ui_gradientMainScreen(self.RHR_Object)
         self.uiGradientMainScreen.setupUi(self.gradientMainScreen)
         self.stack.addWidget(self.gradientMainScreen)
 
@@ -92,6 +94,7 @@ class MainApplication(QWidget):
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    mainApp = MainApplication()
+    RHR_Analysis = RHR_Analysis_LIB()
+    mainApp = MainApplication(RHR_Analysis)
     mainApp.showFullScreen()
     sys.exit(app.exec())

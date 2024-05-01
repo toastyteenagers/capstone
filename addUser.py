@@ -10,7 +10,9 @@ import face_recognition
 import numpy as np
 import asyncio 
 from users import createUser
-import RHR_Analysis
+
+#import RHR_Analysis
+#RHR_Analysis = "do not delete me"
 Camera_X = 640
 Camera_Y = 480
 Camera_W = 640
@@ -20,8 +22,10 @@ font_size = 30
 
 class AddUserScreen(QWidget):
     backClicked = QtCore.pyqtSignal()
-    def __init__(self, ui_init_conf_main, parent=None):
+    def __init__(self, ui_init_conf_main, RHR_Analysis_Object, parent=None):
         super(AddUserScreen,self).__init__(parent)
+
+        self.RHR_Analysis = RHR_Analysis_Object
 
         self.ui_init_conf_main = ui_init_conf_main
 
@@ -133,8 +137,10 @@ class AddUserScreen(QWidget):
 
     def add_rhr(self):
         print('need to inplement rhr method')
-        beatList = asyncio.run(RHR_Analysis.sample())
-        rhr = asyncio.run(RHR_Analysis.analysis(beatList))
+        #beatList = asyncio.run(self.RHR_Analysis.sample())
+        #rhr = asyncio.run(self.RHR_Analysis.analysis(beatList))
+        beatList = self.RHR_Analysis.sample()
+        rhr = self.RHR_Analysis.analysis(beatList)
         print(rhr)
         self.rhr = rhr
         return rhr

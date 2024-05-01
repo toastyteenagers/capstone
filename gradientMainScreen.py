@@ -8,15 +8,18 @@ from PyQt5.QtGui import QPixmap, QImage
 import asyncio
 
 import resources
-import RHR_Analysis
+#from RHR_Analysis2 import RHR_Analysis_LIB
+#RHR_Analysis = RHR_Analysis_LIB()
 #import DoorControl
 import users
 
 class Ui_gradientMainScreen(object):
     
-    def __init__(self, parent=None):
+    def __init__(self, RHR_Object, parent=None):
         #super(Ui_gradientMainScreen,self).__init__(parent)
         #self.ui_init_conf_main = ui_init_conf_main
+        self.RHR_Analysis = RHR_Object
+        self.recognizedUser = None
         self.username = None
         self.rhr = None
         self.status = "Processing"
@@ -33,15 +36,14 @@ class Ui_gradientMainScreen(object):
             else:
                 print(self.rhr)
             if (self.rhr is not None and self.username is not None) :
-                RHR_Analysis.OpenFor5()
+                self.RHR_Analysis.OpenFor5()
                 print("AUTHORIZED")
                 self.status = "Authorized"
                 self.statusValue.setText(self.status)
                 self.rhr = None
                 self.username = None
-                self.rhrTxt.setText('')
-                self.userNameTxt.setText('') 
-                 
+                self.recognizedUser = None
+    
     def setupUi(self, gradientMainScreen):
         userList = users.load_users()
         self.known_face_encodings = []
@@ -52,7 +54,7 @@ class Ui_gradientMainScreen(object):
         
         #gradientMainScreen.setObjectName("gradientMainScreen")
         gradientMainScreen.resize(1920, 1080)
-        gradientMainScreen.setStyleSheet("background-image: url(:/images/images/Red_BG.png);")
+        gradientMainScreen.setStyleSheet("background-image: url(:/images/images/Blue_BG.png);")
 
         self.centralwidget = QtWidgets.QWidget(gradientMainScreen)
         self.centralwidget.setObjectName("centralwidget")
@@ -81,6 +83,7 @@ class Ui_gradientMainScreen(object):
         #QtCore.QMetaObject.connectSlotsByName(gradientMainScreen)
         self.startB = QPushButton("Start", self.centralwidget)
         self.startB.clicked.connect(self.startButton)
+        self.wasStarted = False
         self.startB.setGeometry(QtCore.QRect(280, 81, 151, 61))
         
         self.nameTxt = QLabel("User: ", self.centralwidget)
@@ -114,12 +117,19 @@ class Ui_gradientMainScreen(object):
         if self.rhr is None or self.username is None:
             self.status="Processing"
             self.statusValue.setText(self.status)
-        beatList = asyncio.run(RHR_Analysis.sample())
-        rhr = asyncio.run(RHR_Analysis.analysis(beatList))
+        
+        beatList = self.RHR_Analysis.sample()
+        rhr = self.RHR_Analysis.analysis(beatList)
+        #beatList = asyncio.run(self.RHR_Analysis.sample())
+        #rhr = asyncio.run(self.RHR_Analysis.analysis(beatList))
         print(rhr)
         self.rhr = rhr
         self.rhrTxt.setText(str(rhr))
         self.checkOpen()
+        if self.recognizedUser is not None:
+            print("Recognized User: "+self.recognizedUser.get_first_name())
+            print("recognized user's RHR:'"+str(self.recognizedUser.get_rhr()))
+            print("Duress? : "+str(self.RHR_Analysis.analyze(self.recognizedUser.get_rhr(), rhr)))
         return rhr
         
     def get_camera_frame(self):
@@ -139,8 +149,13 @@ class Ui_gradientMainScreen(object):
         if self.rhr is None or self.username is None:
             self.status="Processing"
             self.statusValue.setText(self.status)
-        known_encodings = self.known_face_encodings
-        known_names = self.known_face_names 
+            
+        userList = users.load_users()
+        self.known_face_encodings = []
+        self.known_face_names = []  # Update with known user names
+        for user in userList:
+            self.known_face_encodings.append(user.get_encodings())
+            self.known_face_names.append(user.name)
         # Get a frame from the camera
         frame = self.get_camera_frame()
 
@@ -150,23 +165,24 @@ class Ui_gradientMainScreen(object):
         # Find all face locations and face encodings in the current frame
         face_locations = face_recognition.face_locations(rgb_frame)
         face_encodings = face_recognition.face_encodings(rgb_frame, face_locations)
-
+    
         # Assuming that each frame has one face for simplicity
         if face_encodings:
             # Use the first found face encoding
             face_encoding_to_check = face_encodings[0]
 
             # Check each known face encoding against the one detected
-            matches = face_recognition.compare_faces(known_encodings, face_encoding_to_check)
-            face_distances = face_recognition.face_distance(known_encodings, face_encoding_to_check)
+            matches = face_recognition.compare_faces(self.known_face_encodings, face_encoding_to_check)
+            face_distances = face_recognition.face_distance(self.known_face_encodings, face_encoding_to_check)
             
             best_match_index = None
             if matches:
                 best_match_index = face_distances.argmin()
             
             if best_match_index is not None and matches[best_match_index]:
-                name=known_names[best_match_index]
+                name=self.known_face_names[best_match_index]
                 print(name)
+                #self.recognizedUser = users.search_database(face_encoding_to_check)
                 self.username = name
                 self.userNameTxt.setText(name)
                 self.checkOpen()
@@ -182,12 +198,15 @@ class Ui_gradientMainScreen(object):
     
             
     def startButton(self):
+        if self.wasStarted:
+            return
         self.capture = cv2.VideoCapture(0)
         self.capture.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
         self.capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
         self.timer = QTimer()
         self.timer.timeout.connect(self.update_frame)
         self.timer.start(30)  # Update frame every 30ms
+        self.wasStarted = True
 
     def update_frame(self):
         ret, frame = self.capture.read()
