@@ -6,7 +6,8 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import QTimer
 from PyQt5.QtGui import QPixmap, QImage
 import asyncio
-
+import threading
+import subprocess
 import resources
 #from RHR_Analysis2 import RHR_Analysis_LIB
 #RHR_Analysis = RHR_Analysis_LIB()

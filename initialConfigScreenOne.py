@@ -2,8 +2,12 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5 import QtWidgets, QtCore, QtGui
+import os
+import time
 import sys
 import numpy as np
+import subprocess
+import threading
 
 class Ui_InitConfScreenOneBG(object):
     def setupUi(self, InitConfScreenOneBG):
@@ -98,6 +102,22 @@ class Ui_InitConfScreenOneBG(object):
         self.retranslateUi(InitConfScreenOneBG)
         QtCore.QMetaObject.connectSlotsByName(InitConfScreenOneBG)
 
+        # screenReaderPath = 'testTts.sh'
+        # threading.Thread(target=lambda: subprocess.run('testTts.sh', check=True, shell=True))
+        # https://stackoverflow.com/questions/3777301/how-to-call-a-shell-script-from-python-code
+        
+        self.startBashScript()
+        
+    def startBashScript(self):
+        #screenReaderPath = 'testTts.sh'
+        thread = threading.Thread(target=self.runBashScript)
+        thread.daemon = True
+        thread.start()
+        
+    def runBashScript(self):
+        time.sleep(5)
+        subprocess.run('~/capstone/initConfScreenOneVoice.sh', check=True, shell=True)
+
     def retranslateUi(self, InitConfScreenOneBG):
         _translate = QtCore.QCoreApplication.translate
         InitConfScreenOneBG.setWindowTitle(_translate("InitConfScreenOneBG", "Form"))
@@ -115,4 +135,5 @@ if __name__ == "__main__":
     ui = Ui_InitConfScreenOneBG()
     ui.setupUi(InitConfScreenOneBG)
     InitConfScreenOneBG.showFullScreen()
+    #ui.runShellScript()
     sys.exit(app.exec_())

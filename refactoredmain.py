@@ -98,3 +98,4 @@ if __name__ == "__main__":
     mainApp = MainApplication(RHR_Analysis)
     mainApp.showFullScreen()
     sys.exit(app.exec())
+    
