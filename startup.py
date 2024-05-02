@@ -1,3 +1,4 @@
+from playsound import playsound
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
@@ -5,6 +6,7 @@ from PyQt5 import QtWidgets, QtCore
 import sys
 import resources
 import numpy as np
+import threading
 
 class Ui_LoadScreen(object):
     def __init__(self):
@@ -33,6 +35,8 @@ class Ui_LoadScreen(object):
         self.fadeInAnimation.setEasingCurve(QEasingCurve.InOutQuad)  # Smooth transition
         self.fadeInAnimation.start()
 
+        threading.Thread(target=lambda: playsound('sounds/startup_noise2.wav')).start()
+
         self.retranslateUi(LoadScreen)
         QMetaObject.connectSlotsByName(LoadScreen)
 
@@ -50,7 +54,6 @@ class Ui_LoadScreen(object):
                                      "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><img src=\":/images/images/project_backdown_logo_centered.jpg\" /></p></body></html>"))
 
 if __name__ == "__main__":
-    import sys
     app = QtWidgets.QApplication(sys.argv)
     LoadScreen = QtWidgets.QWidget()
     ui = Ui_LoadScreen()
@@ -58,3 +61,4 @@ if __name__ == "__main__":
     LoadScreen.showFullScreen()
     LoadScreen.show()
     sys.exit(app.exec_())
+
