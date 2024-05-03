@@ -11,6 +11,7 @@ from mainInitialConfigScreen import Ui_InitConfMain
 from gradientMainScreen import Ui_gradientMainScreen
 from testScreen import TestScreen
 from addUser import AddUserScreen
+from accessibilityScreen import Ui_Accessibility
 
 from RHR_Analysis2 import RHR_Analysis_LIB
 
@@ -41,6 +42,11 @@ class MainApplication(QWidget):
         self.uiMainInitConfScreen.setupUi(self.mainInitConfScreen)
         self.stack.addWidget(self.mainInitConfScreen)
 
+        self.accessibilityScreen = QtWidgets.QWidget()
+        self.uiAccessibilityScreen = Ui_Accessibility()
+        self.uiAccessibilityScreen.setupUi(self.accessibilityScreen)
+        self.stack.addWidget(self.accessibilityScreen)
+
         # Test screens setup (will change drastically)
         self.testScreenAdmin = TestScreen(self.uiMainInitConfScreen, self.stack)
         self.stack.addWidget(self.testScreenAdmin)
@@ -69,7 +75,7 @@ class MainApplication(QWidget):
         # Connect buttons to show test screens
         self.uiMainInitConfScreen.AdminControlsButton.clicked.connect(lambda: self.showTestScreen(3))
         self.uiMainInitConfScreen.AddUserButton.clicked.connect(lambda: self.showTestScreen(4))
-        self.uiMainInitConfScreen.AccessibilityButton.clicked.connect(lambda: self.showTestScreen(5))
+        self.uiMainInitConfScreen.AccessibilityButton.clicked.connect(lambda: self.showAccessibilityScreen())
         #self.uiMainInitConfScreen.ProceedButton.clicked.connect(self.showGradientMainScreen)
         #self.uiMainInitConfScreen.ProceedButton.clicked.connect(lambda: self.showGradientMainScreen(6))
 
@@ -77,8 +83,11 @@ class MainApplication(QWidget):
         self.uiInitConfScreenOne.InitConfScreenOneButton.clicked.connect(self.showMainInitConfScreen)
         self.uiMainInitConfScreen.ProceedButton.clicked.connect(self.showGradientMainScreen)
 
-    def showTestScreen(self, index):
-        self.stack.setCurrentIndex(index)  # Use the index of the test screens
+    # def showTestScreen(self, index):
+    #     self.stack.setCurrentIndex(index)
+
+    def showAccessibilityScreen(self):
+        self.stack.setCurrentWidget((self.acc))
 
     def showInitConfScreen(self):
         self.stack.setCurrentWidget(self.initConfScreenOne)
