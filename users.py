@@ -90,7 +90,7 @@ class administrator(newUser):
 
 class UserSchema(Schema):
     name = fields.String()
-    encodings = fields.List(fields.Float())
+    encodings = fields.List(fields.Integer())
     rhr = fields.Integer()
     disability = fields.Integer()
     uses = fields.List(fields.String())
@@ -104,7 +104,7 @@ class UserSchema(Schema):
 
 class AdminSchema(Schema):
     name = fields.String()
-    encodings = fields.List(fields.Float())
+    encodings = fields.List(fields.Integer())
     rhr = fields.Integer()
     disability = fields.Integer()
     uses = fields.List(fields.String())
@@ -206,19 +206,60 @@ def add_admin(data):
     conn.close()
 
 
-def search_database(encodings):
+def search_user_database(encodings):
     encodings = json.dumps(encodings)
     conn = sqlite3.connect('users.db')
     c = conn.cursor()
     c.execute("SELECT * FROM users WHERE encodings=?", (encodings,))
-    print(c.fetchone())
+    schema = UserSchema()
+    tempUser = c.fetchone()
+    user_data = {
+        "name": tempUser[0],
+        "encodings": json.loads(tempUser[1]),
+        "rhr": tempUser[2],
+        "disability": tempUser[3],
+        "level": tempUser[6],
+        "uses": json.loads(tempUser[4]),
+        "doc": tempUser[5]
+    }
     conn.commit()
     conn.close()
-    
-def search_passwords(password):
+    return (schema.load(user_data))
+
+
+def search_database(encodings):
+    if search_user_database(encodings) is not None:
+        return search_user_database(encodings)
+    if search_admin_database(encodings) is not None:
+        search_admin_database(encodings)
+
+
+def search_admin_database(encodings):
+    encodings = json.dumps(encodings)
     conn = sqlite3.connect('admins.db')
     c = conn.cursor()
-    c.execute("SELECT * FROM admins WHERE password=?", (password,))
+    c.execute("SELECT * FROM admins WHERE encodings=?", (encodings,))
+    schema = AdminSchema()
+    tempUser = c.fetchone()
+    user_data = {
+        "name": tempUser[0],
+        "encodings": json.loads(tempUser[1]),
+        "rhr": tempUser[2],
+        "disability": tempUser[3],
+        "level": tempUser[6],
+        "uses": json.loads(tempUser[4]),
+        "doc": tempUser[5],
+        "password": tempUser[7]
+    }
+    conn.commit()
+    conn.close()
+    return (schema.load(user_data))
+
+
+def search_passwords(password, name):
+    conn = sqlite3.connect('admins.db')
+    c = conn.cursor()
+    c.execute("SELECT * FROM admins WHERE password=? AND name=?", (password, name))
     if c.fetchone():
         return True
     conn.commit()
@@ -295,30 +336,31 @@ def load_admins():
     return active_users
 
 
-# createUser("Hayden Test", [12], 95, 0)
-# createUser("Owen Test", [1235], 95, 0)
-# createUser("Alex Test", [1234], 95, 0)
-#createAdmin("Owen Boxx", [123], 95, 0, 'team11')
+# createUser("Hayden Test", [12111111], 95, 0)
+# createUser("Owen Test", [12352222222], 95, 0)
+# createUser("Alex Test", [12343333333], 95, 0)
+# createAdmin("Owen Boxx", [123], 95, 0, 'team11')
 # createUser("test", [4322], 95, 0)
 # createAdmin("Owen Boxx", [4322], 95, 0, 'team11')
-#conn = sqlite3.connect('users.db')
-#c = conn.cursor()
-#conn2 = sqlite3.connect('admins.db')
-#c2 = conn2.cursor()
+# conn = sqlite3.connect('users.db')
+# c = conn.cursor()
+# conn2 = sqlite3.connect('admins.db')
+# c2 = conn2.cursor()
 # c.execute("SELECT * FROM users WHERE name='Owen'")
 
 # Comment out
-#c.execute("SELECT * FROM users")
-#print(c.fetchall())
+# c.execute("SELECT * FROM users")
+# print(c.fetchall())
 
-#c2.execute("SELECT * FROM admins")
-#print(c2.fetchall())
+# c2.execute("SELECT * FROM admins")
+# print(c2.fetchall())
 
-#conn.commit()
-#conn.close()
+# conn.commit()
+# conn.close()
 
-#conn2.commit()
-#conn2.close()
+# conn2.commit()
+# conn2.close()
+
 
 # delete_from_database('Alex', [1235])
 
@@ -332,6 +374,4 @@ def load_admins():
 # fetchmany
 
 
-
-#load_users()
-
+load_users()
