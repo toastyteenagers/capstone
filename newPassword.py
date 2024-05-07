@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 import sys
+import subprocess
 import numpy as np
 from users import load_users, load_admins, delete_from_database, search_passwords
 
@@ -34,26 +35,27 @@ class passwordScreen(QWidget):
         self.passwordPrompt = QLabel("Please enter your name and password below",self)
         self.passwordPrompt.setStyleSheet("QLabel{font-size: 40pt; color: white;}")
         self.passwordPrompt.setFont(self.font)
-        self.passwordPrompt.setGeometry(450,720,1500,80)
+        self.passwordPrompt.setGeometry(430,710,1500,80)
 
         self.nameText = QLabel("Full Name:",self)
         self.nameText.setStyleSheet("QLabel{font-size: 30pt; color: white;}")
         self.nameText.setFont(self.font)
         self.nameText.setGeometry(640,800,1500,80)
         self.nameBox = QLineEdit(self)
-        self.nameBox.setGeometry(835,815,445,40)
+        self.nameBox.setGeometry(845,815,455,40)
 
         self.passwordTxt = QLabel("Enter Password:",self)
         self.passwordTxt.setStyleSheet("QLabel{font-size: 30pt; color: white;}")
         self.passwordTxt.setFont(self.font)
         self.passwordTxt.setGeometry(640,880,1500,80)
         self.passwordBox = QLineEdit(self)
-        self.passwordBox.setGeometry(920,895,360,40)
+        self.passwordBox.setEchoMode(QLineEdit.EchoMode.Password)
+        self.passwordBox.setGeometry(940,895,360,40)
 
         self.enterButton = QPushButton("Enter",self)
         self.enterButton.setStyleSheet("QLabel{font-size: 30pt; color: white;}")
         self.enterButton.setFont(self.font)
-        self.enterButton.setGeometry(640,960,640,40)
+        self.enterButton.setGeometry(640,960,665,40)
         self.enterButton.clicked.connect(self.checkPassword)
 
         self.incorrectTxt = QLabel("The name or password is incorrect",self)
@@ -66,7 +68,8 @@ class passwordScreen(QWidget):
         password = self.passwordBox.text()
         name = self.nameBox.text()
         if search_passwords(password,name):
-            print("Pass!")
+            subprocess.Popen([sys.executable, 'adminControlScreen.py'])
+            sys.exit()
         else:
             self.incorrectTxt.setVisible(True)
 
@@ -99,7 +102,7 @@ def main():
     app = QApplication(sys.argv)
     app.setStyleSheet(stylesheet)
     window = passwordScreen()
-    window.show()
+    window.showFullScreen()
     sys.exit(app.exec_())
 
 if __name__ == "__main__":

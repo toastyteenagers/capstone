@@ -90,7 +90,7 @@ class administrator(newUser):
 
 class UserSchema(Schema):
     name = fields.String()
-    encodings = fields.List(fields.Integer())
+    encodings = fields.List(fields.Float())
     rhr = fields.Integer()
     disability = fields.Integer()
     uses = fields.List(fields.String())
@@ -104,7 +104,7 @@ class UserSchema(Schema):
 
 class AdminSchema(Schema):
     name = fields.String()
-    encodings = fields.List(fields.Integer())
+    encodings = fields.List(fields.Float())
     rhr = fields.Integer()
     disability = fields.Integer()
     uses = fields.List(fields.String())
@@ -207,13 +207,14 @@ def add_admin(data):
 
 
 def search_user_database(encodings):
-def search_database(encodings):
     encodings = json.dumps(encodings)
     conn = sqlite3.connect('users.db')
     c = conn.cursor()
     c.execute("SELECT * FROM users WHERE encodings=?", (encodings,))
     schema = UserSchema()
     tempUser = c.fetchone()
+    if tempUser is None:
+        return
     user_data = {
         "name": tempUser[0],
         "encodings": json.loads(tempUser[1]),
@@ -242,6 +243,9 @@ def search_admin_database(encodings):
     c.execute("SELECT * FROM admins WHERE encodings=?", (encodings,))
     schema = AdminSchema()
     tempUser = c.fetchone()
+    if tempUser is None:
+        print(tempUser)
+        return
     user_data = {
         "name": tempUser[0],
         "encodings": json.loads(tempUser[1]),
@@ -261,14 +265,6 @@ def search_passwords(password, name):
     conn = sqlite3.connect('admins.db')
     c = conn.cursor()
     c.execute("SELECT * FROM admins WHERE password=? AND name=?", (password, name))
-    print(c.fetchone())
-    conn.commit()
-    conn.close()
-
-def search_passwords(password):
-    conn = sqlite3.connect('admins.db')
-    c = conn.cursor()
-    c.execute("SELECT * FROM admins WHERE password=?", (password,))
     if c.fetchone():
         return True
     conn.commit()
@@ -343,6 +339,44 @@ def load_admins():
     conn.close()
 
     return active_users
+
+
+# createUser("Hayden Test", [12111111], 95, 0)
+# createUser("Owen Test", [12352222222], 95, 0)
+# createUser("Alex Test", [12343333333], 95, 0)
+# createAdmin("Owen Boxx", [123], 95, 0, 'team11')
+# createUser("test", [4322], 95, 0)
+# createAdmin("Owen Boxx", [4322], 95, 0, 'team11')
+# conn = sqlite3.connect('users.db')
+# c = conn.cursor()
+#conn2 = sqlite3.connect('admins.db')
+#c2 = conn2.cursor()
+# c.execute("SELECT * FROM users WHERE name='Owen'")
+
+# Comment out
+# c.execute("SELECT * FROM users")
+# print(c.fetchall())
+
+#c2.execute("SELECT * FROM admins")
+#print(c2.fetchall())
+
+# conn.commit()
+# conn.close()
+
+#conn2.commit()
+#conn2.close()
+
+
+# delete_from_database('Alex', [1235])
+
+# c.execute("SELECT * FROM users")
+# print(c.fetchall())
+
+
+# search_database([1235])
+# fetchone
+# fetchall
+# fetchmany
 
 
 load_users()

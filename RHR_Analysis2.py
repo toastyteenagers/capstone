@@ -17,7 +17,7 @@ class RHR_Analysis_LIB:
     def __init__(self):
         self.mean = 65.5
         self.std_dev = 3.10
-        self.allowable_deviation = 3
+        self.allowable_deviation = 10
 
         self.isDoorOpen = False
 
