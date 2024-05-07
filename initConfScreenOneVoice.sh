@@ -1,0 +1,1 @@
+echo '(SayText "Welcome to the Project Backdown Initial Setup and Configuration Wizard. To start, please complete admin account setup. You will be required to input biometric data, user information, and your system configuration needs.")' | festival --pipe
