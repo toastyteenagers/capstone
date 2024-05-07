@@ -1,22 +1,22 @@
 import sqlite3
 
-conn = sqlite3.connect('users.db')
+#conn = sqlite3.connect('users.db')
 
-c = conn.cursor()
+#c = conn.cursor()
 
-c.execute("""CREATE TABLE users (
-          name text,
-          encodings text,
-          rhr integer,
-          disability integer,
-          uses text,
-          doc text,
-          level integer
-        )""")
+#c.execute("""CREATE TABLE users (
+#          name text,
+#          encodings text,
+#          rhr integer,
+#          disability integer,
+#          uses text,
+#          doc text,
+#          level integer
+#        )""")
 
-conn.commit()
+#conn.commit()
 
-conn.close()
+#conn.close()
 
 conn = sqlite3.connect('admins.db')
 
