@@ -62,11 +62,11 @@ class Ui_Accessibility(object):
 "font:  18pt \'TI-92p Mini Sans\';\n"
 "background-color: gray;")
         self.checkBox_3.setObjectName("checkBox_3")
-        self.InitConfScreenOneButton = QtWidgets.QPushButton(Accessibility)
-        self.InitConfScreenOneButton.setGeometry(QtCore.QRect(900, 650, 151, 61))
-        self.InitConfScreenOneButton.setStyleSheet("background: white;\n"
+        self.AccessibilityButton = QtWidgets.QPushButton(Accessibility)
+        self.AccessibilityButton.setGeometry(QtCore.QRect(900, 650, 151, 61))
+        self.AccessibilityButton.setStyleSheet("background: white;\n"
 "font: 12pt \"TI-92p Mini Sans\";")
-        self.InitConfScreenOneButton.setObjectName("InitConfScreenOneButton")
+        self.AccessibilityButton.setObjectName("AccessibilityButton")
         self.topLeftLine.raise_()
         self.topRightLine.raise_()
         self.bottomLine.raise_()
@@ -76,7 +76,7 @@ class Ui_Accessibility(object):
         self.checkBox.raise_()
         self.checkBox_2.raise_()
         self.checkBox_3.raise_()
-        self.InitConfScreenOneButton.raise_()
+        self.AccessibilityButton.raise_()
 
         self.retranslateUi(Accessibility)
         QtCore.QMetaObject.connectSlotsByName(Accessibility)
@@ -88,7 +88,7 @@ class Ui_Accessibility(object):
         self.checkBox.setText(_translate("Accessibility", "Enable Screen Reader"))
         self.checkBox_2.setText(_translate("Accessibility", "High Contrast Mode"))
         self.checkBox_3.setText(_translate("Accessibility", "Heart Rate Deviation Adjustment"))
-        self.InitConfScreenOneButton.setText(_translate("Accessibility", "Back"))
+        self.AccessibilityButton.setText(_translate("Accessibility", "Back"))
 
 
 if __name__ == "__main__":
