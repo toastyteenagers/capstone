@@ -1,49 +1,18 @@
 # from the information found in this paper: https://www.researchgate.net/figure/Distribution-of-average-daily-resting-heart-rates-The-average-daily-RHR-for-57-836_fig2_339061433
 
 import UserFields
-import asyncio
-import concurrent.futures
-import serial as Serial
-import heartpy as hp
-import time
-import pyfirmata
-
-import numpy as np
-import matplotlib.pyplot as plt
-
-from time import sleep
 
 mean = 65.5
 std_dev = 3.10
 allowable_deviation = 3
 
-isDoorOpen = False
-
-currSample = 0  # this is an index variable, the np array should have arr[currSample] = currentIntesnity
-sampleRate = 1 / (.02)  # samples every 2ms, this is the sample rate in hz
-samplingTime = 10
-totalNeededSamples = 5000  # amount needed for analysis
-
-baud = 9600
-# analog = Serial.Serial(port="/dev/ttyACM0",baudrate=baud,timeout=1)
-board = pyfirmata.Arduino("/dev/ttyACM0")
-it = pyfirmata.util.Iterator(board)
-it.start()
-analog = board.get_pin("a:0:i")
-
-
-## to read from analog pin, use analog.read()
-
-# digital13 = digitalio.DigitalInOut(board.D13)
-# digital13.direction = digitalio.Direction.OUTPUT
-
-# return true if the user is 3+ deviatons away from the mean set from their resting rate.
-def analyze(userField, observedHR):
-    std_deviations_away = abs(observedHR - userField.get_rhr()) / std_dev
+#return true if the user is 3+ deviatons away from the mean set from their resting rate.
+def analyze(userField,observedHR):
+    std_deviations_away = abs(observedHR-userField.get_rhr()) / std_dev
     return std_deviations_away > allowable_deviation
 
-
 # this class will analyze the users' resting heart rate by using a statistical model derived
+userlist
 
 
 def clean(currString):
@@ -136,4 +105,5 @@ def toggle():
         openDoor()
     else:
         closeDoor()
-    isDoorOpen = not(isDoorOpen)
+    isDoorOpen = not(isDoorOpen) 
+ main()

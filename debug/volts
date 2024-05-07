@@ -1,0 +1,20 @@
+#!/bin/bash
+
+voltages=/home/team11/debug/voltage.txt
+
+if [ -f $voltages ]; then
+    rm $voltages;
+fi
+
+seconds=$1
+
+sleep 2;
+
+for i in $(seq 1 $seconds); do {
+    s=`sudo cat /sys/bus/i2c/devices/6-0040/iio:device0/in_voltage0_input`;
+    sleep 1;
+    echo "$s" >> /home/team11/debug/voltage.txt;
+}; done;
+
+/home/team11/debug/voltage_stats
+
