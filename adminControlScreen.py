@@ -4,6 +4,7 @@ from PyQt5.QtCore import *
 import sys
 import numpy as np
 from users import load_users, load_admins, delete_from_database
+from moo import CbcMoo, CfbMoo, OfbMoo
 
 
 class adminManagement(QWidget):
@@ -18,7 +19,8 @@ class adminManagement(QWidget):
         self.createUI()
 
     def gotoAddUser(self):
-        print("go to add user screen")
+        subprocess.Popen([sys.executable, 'run.py'])
+        sys.exit()
 
     def load(self):
         admins = load_admins()
@@ -38,9 +40,12 @@ class adminManagement(QWidget):
         self.group_layout = QVBoxLayout()
 
         self.top_layout = QFormLayout()
-        self.addUser = QLabel("Add a new User: ")
-        self.addUserButton = QPushButton("Add User")
-        self.addUserButton.clicked.connect(self.gotoAddUser)
+        self.modeOfOperationLabel = QLabel("Select Mode of Operation ")
+        self.modeOfOperationBox = QComboBox(self)
+        self.modeOfOperationBox.setGeometry(114, 420, 597, 50)
+        self.modeOfOperationBox.addItems(['Cipher Block Chaining (CBC)', 'Cipher Feedback (CFB)', 'Output Feedback (OFB)'])
+        
+        
         self.top_layout.addRow(self.addUser, self.addUserButton)
         self.layout.addLayout(self.top_layout)
 
