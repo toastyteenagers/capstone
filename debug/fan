@@ -1,0 +1,206 @@
+#!/bin/bash
+
+# CLA check: only 1 or 2 args
+# arg1 must be integer or "setup"
+# arg2 must be empty or "eco"
+# if arg1 is "setup" arg2 must be "eco"
+
+# CLA check: error message for usage
+help() {
+    echo -e 'Usage: fan <percent>        (for normal mode)' >&2
+    echo -e '       fan <percent> eco    (for eco-friendly mode)' >&2
+    echo -e '       fan setup eco        (set up eco-friendly mode)' >&2
+    echo -e '\n<percent> The fan percentage, from 0% to 100%' >&2
+    echo -e '          Do not include the percent sign.' >&2
+    echo -e '\nExamples:' >&2
+    echo -e 'fan 100          set fan to maximum power' >&2
+    echo -e 'fan 80           set fan to 80% power' >&2
+    echo -e 'fan 0            shut down fan completely' >&2
+    echo -e 'fan 100 eco      set fan to highest eco-friendly setting' >&2
+    echo -e 'fan 80 eco       set fan to 80%, auto-reduce for eco-friendly mode' >&2
+    echo -e 'fan setup eco    modify eco-friendly operations policy\n' >&2
+}
+
+# CLA check: number of arguments must be 1 or 2
+if [[ $# -lt 1 || $# -gt 2 ]]; then
+    help
+    exit 1
+fi
+
+# CLA check: which mode for user
+# normal: fan <percent>
+# eco:    fan <percent> eco
+# setup:  fan setup eco
+
+mode=none
+re='^[0-9]+$'
+
+# CLA check: is it normal mode?
+if [[ $# -eq 1 ]]; then
+    if ! [[ $1 =~ $re ]]; then
+        help
+        exit 1
+    fi
+    mode=normal
+fi
+
+# CLA check: is it eco mode? is it setup mode?
+if [[ $# -eq 2 ]]; then
+    if ! [[ $1 =~ $re ]]; then
+        if [[ $1 == "setup" ]]; then
+            if [[ $2 == "eco" ]]; then
+                mode=setup
+            else
+                help
+                exit 1
+            fi
+        else
+            help
+            exit 1
+        fi
+    else
+        if [[ $2 == "eco" ]]; then
+            mode=eco
+        else
+            help
+            exit 1
+        fi
+    fi
+fi
+
+# bounds check: integer in [0,100]
+input=$1
+if [[ $input -lt 0 ]]; then
+    echo 'An invalid percentage has been specified.' >&2
+    echo 'The minimum is 0%.' >&2
+    echo 'Do not include a percent sign.' >&2
+    exit 1
+elif [[ $input -gt 100 ]]; then
+    echo 'An invalid percentage has been specified.' >&2
+    echo 'The maximum is 100%.' >&2
+    echo 'Do not include a percent sign.' >&2
+    exit 1
+fi
+
+#### SETUP MODE
+
+if [[ $mode == "setup" ]]; then
+    echo "in setup mode"
+    exit 0
+fi
+
+#### ECO MODE
+
+ecomaximum=100
+if [[ $mode == "eco" ]]; then
+    echo "in eco mode"
+fi
+
+#### NORMAL MODE (and eco mode)
+
+if [[ $mode == "normal" ]]; then
+    echo "in normal mode"
+fi
+
+# cook PWM duty percentage
+pwmpercent=$input
+if [[ $pwmpercent -eq 0 ]]; then
+    pwmpercent=0
+elif [[ $pwmpercent -le 20 ]]; then
+    pwmpercent=20
+fi
+
+# convert from percentage to unsigned byte
+byteval=$(( $input * 255 / 100 ))
+bytepwm=$byteval
+if [[ $byteval -eq 0 ]]; then
+    bytepwm=0
+elif [[ $byteval -le 51 ]]; then
+    bytepwm=51
+fi
+
+# convert from unsigned byte to RPM
+p1=$(( $byteval + 25 ))
+p2=$(( $p1 * $p1 ))
+p3=$(( $p2 / 20 ))
+p4=$(( $p3 + 1080 ))
+xrpm=$p4
+if [[ $xrpm -le 1200 ]]; then
+    xrpm=1200
+elif [[ $xrpm -ge 5000 ]]; then
+    xrpm=5000
+fi
+if [[ $byteval -eq 0 ]]; then
+    xrpm=0
+fi
+
+# calculate approximate error
+rpmerror=$(( (8800 - $xrpm) / 380 ))
+if [[ $xrpm -eq 0 ]]; then
+    rpmerror=0
+fi
+
+# output file
+file=/sys/devices/pwm-fan/target_pwm
+
+# before adjusting fan, get current pwm value
+beforehand=```cat /sys/devices/pwm-fan/cur_pwm```
+
+# control the fan
+sudo echo $bytepwm > $file
+
+# tell user results
+echo 'cooked PWM duty: '$pwmpercent'%'
+echo '        approx. RPM = '$xrpm' RPM (+/-'$rpmerror'%)'
+
+# number of seconds to wait
+numseconds=0
+sec1=$(( ($pwmpercent - 100) / 4 + 19 ))
+if [[ $sec1 -le 12 ]]; then
+    numseconds=12
+else
+    numseconds=$sec1
+fi
+
+# total number drawn
+toDraw=50
+
+# are we going up or down
+direction=0
+if [[ $bytepwm -gt $beforehand ]]; then
+    direction=1
+elif [[ $bytepwm -lt $beforehand ]]; then
+    direction=-1
+fi
+
+# if input is the same as current
+# then do nothing
+if [[ $direction -eq 0 ]]; then
+    echo "Fan is already at this level."
+# otherwise
+else
+# this is a function of toDraw, direction, bytepwm, beforehand, ecomaximum
+# if direction=1 and ecomaximum=100
+#   green starts at beforehand * toDraw / 255
+#   green ends at currentlevel * toDraw / 255
+#   gray starts at currentlevel * toDraw / 255 + 1 (may be nulled)
+#   white starts at 1
+#   white ends at beforehand * toDraw / 255 - 1
+# if direction=1 and ecomaximum!=100
+#   blue starts at ecomaximum * toDraw / 255
+#   blue ends at toDraw
+#   green starts at beforehand * toDraw / 255 
+#   green ends at ecomaximum * toDraw / 255 - 1
+# if increasing draw white, red decreasing, gray increasing, blue if eco
+# if decreasing draw white, green increasing, gray decreasing, blue if eco
+# if increasing:
+#   green starts at beforehand / 255 and ends at bytepwm / 255
+#   gray starts at bytepwm / 255 and ends at toDraw if not e
+# if decreasing:
+    for i in {1..$numseconds}; do
+        sleep 1
+    done
+fi
+
+# EXAMPLE OUTPUT
+# Fan mode: normal or eco

@@ -6,8 +6,11 @@
     <file>images/Blue_BG.png</file>
     <file>images/Green_BG.png</file>
     <file>images/Red_BG.png</file>
+<<<<<<< HEAD
   </qresource>
   <qresource prefix="sounds">
     <file>sounds/startup_noise2.wav</file>
+=======
+>>>>>>> main
   </qresource>
 </RCC>

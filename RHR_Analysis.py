@@ -13,6 +13,9 @@ import matplotlib.pyplot as plt
 
 from time import sleep
 
+
+import UserFields
+
 mean = 65.5
 std_dev = 3.10
 allowable_deviation = 3
@@ -43,6 +46,13 @@ def analyze(userField, observedHR):
     std_deviations_away = abs(observedHR - userField.get_rhr()) / std_dev
     return std_deviations_away > allowable_deviation
 
+
+# this class will analyze the users' resting heart rate by using a statistical model derived
+
+#return true if the user is 3+ deviatons away from the mean set from their resting rate.
+def analyze(userField,observedHR):
+    std_deviations_away = abs(observedHR-userField.get_rhr()) / std_dev
+    return std_deviations_away > allowable_deviation
 
 # this class will analyze the users' resting heart rate by using a statistical model derived
 
@@ -111,10 +121,16 @@ async def analysis(beatList):
 
 async def main():
     pass
+    beatList = await sample()
+    await analysis(beatList)
+    openDoor()
+    time.sleep(8)
+    closeDoor()
 
 
 if __name__ == '__main__':
     asyncio.run(main())
+
     
 import time
 
@@ -124,10 +140,15 @@ def openDoor():
     #then write to the pin
     #then resume
     #board.iterate()
+
+import time
+
+def openDoor():
     board.digital[13].write(1)
 
 
 def closeDoor():
+
     global board
     board.digital[13].write(0)
 
@@ -141,4 +162,8 @@ def toggle():
         openDoor()
     else:
         closeDoor()
+
     isDoorOpen = not(isDoorOpen)
+
+    isDoorOpen = not(isDoorOpen) 
+ main()
