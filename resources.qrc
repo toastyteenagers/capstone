@@ -3,5 +3,8 @@
     <file>images/project_backdown_logo_centered.jpg</file>
     <file>images/project_backdown_startup_fade_in.gif</file>
     <file>images/project_backdown_ascii_art.jpg</file>
+    <file>images/Blue_BG.png</file>
+    <file>images/Green_BG.png</file>
+    <file>images/Red_BG.png</file>
   </qresource>
 </RCC>

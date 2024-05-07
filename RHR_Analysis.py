@@ -12,3 +12,98 @@ def analyze(userField,observedHR):
     return std_deviations_away > allowable_deviation
 
 # this class will analyze the users' resting heart rate by using a statistical model derived
+userlist
+
+
+def clean(currString):
+    reconstructedInt = ""
+    for char in str(currString):
+        if char.isdigit():
+            reconstructedInt += char
+    return int(reconstructedInt) if reconstructedInt else 0
+
+
+async def sample():
+    print("Place your hand on the sensor")
+    currSample = 0
+    beatList = []
+    lastValue = -1
+    while currSample < totalNeededSamples:
+        start_time = time.time()  # Start timing before the loop body
+
+        currString = analog.read()
+        if currString is None:
+            continue  # Skip None readings which might occur initially
+
+        currIntensity = clean(currString)
+        beatList.append(currIntensity)
+        currSample += 1
+
+        # Uncomment below for debugging or progress update purposes
+        if currSample % 100 == 0:
+            print(f"Sampling {100 * currSample / totalNeededSamples:.2f}% done")
+        #     print(currIntensity)
+
+        # Calculate elapsed time and adjust sleep time
+        elapsed_time = time.time() - start_time
+        sleep_time = max(0.002 - elapsed_time, 0)  # Ensure sleep_time is not negative
+
+        time.sleep(sleep_time)  # Sleep the adjusted amount of time
+    board.exit()
+    return beatList
+
+
+async def analysis(beatList):
+    beatList2 = [point for point in beatList if 200 < point < 800]
+    indexList = list(range(1, len(beatList2) + 1))
+    try:
+        wd, m = hp.process(np.asarray(beatList2), sample_rate=sampleRate)
+        for measure, value in m.items():
+            print(f'{measure}: {value}')
+    except Exception as e:
+        print(f"Couldn't analyze! Error: {e}")
+        return 85.12
+    return m["bpm"]
+
+
+# def toggle():
+#    #also do the opening/closing (or just call whatever does it)
+#    while True:
+#        digital13.value = True
+#        time.sleep(8)
+#        digital13.value = False
+#        time.sleep(8)
+
+
+
+
+async def main():
+    beatList = await sample()
+    await analysis(beatList)
+    openDoor()
+    time.sleep(8)
+    closeDoor()
+
+
+if __name__ == '__main__':
+    asyncio.run(main())
+import time
+
+def openDoor():
+    board.digital[13].write(1)
+
+
+def closeDoor():
+    board.digital[13].write(0)
+
+def OpenFor5():
+    openDoor()
+    sleep(5)
+    closeDoor()
+def toggle():
+    if isDoorOpen == False:
+        openDoor()
+    else:
+        closeDoor()
+    isDoorOpen = not(isDoorOpen) 
+ main()

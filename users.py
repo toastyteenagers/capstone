@@ -44,9 +44,9 @@ class newUser:
 
     def get_disability(self):
         if self.disability != 0:
-            return "yes"
+            return "True"
         else:
-            return "no"
+            return "False"
 
     def get_dateOfCreation(self):
         return self.doc
@@ -77,9 +77,8 @@ class newUser:
 
 
 class administrator(newUser):
-    def __init__(self, name, encodings, rhr, disability, password="admin"):
-        super().__init__(name, encodings, rhr, disability)
-        self.level = 1
+    def __init__(self, name, encodings, rhr, disability, level=1, uses=[], doc=datetime.now(), password="admin"):
+        super().__init__(name, encodings, rhr, disability, level, uses, doc)
         self.password = password
 
     def set_password(self, password):
@@ -103,6 +102,21 @@ class UserSchema(Schema):
         return newUser(**data)
 
 
+class AdminSchema(Schema):
+    name = fields.String()
+    encodings = fields.List(fields.Integer())
+    rhr = fields.Integer()
+    disability = fields.Integer()
+    uses = fields.List(fields.String())
+    doc = fields.String()
+    level = fields.Integer()
+    password = fields.String()
+
+    @post_load
+    def create_admin(self, data, **kwargs):
+        return administrator(**data)
+
+
 def createUser(name, encodings, rhr, disability, level=0, uses=[], doc=datetime.now()):
     user_data = {
         "name": name,
@@ -121,6 +135,25 @@ def createUser(name, encodings, rhr, disability, level=0, uses=[], doc=datetime.
     add_to_database(result)
 
 
+def createAdmin(name, encodings, rhr, disability, password='Admin', level=1, uses=[], doc=datetime.now()):
+    admin_data = {
+        "name": name,
+        "encodings": encodings,
+        "rhr": rhr,
+        "disability": disability,
+        "level": level,
+        "uses": uses,
+        "doc": doc.strftime("%B %d, %Y %I:%M"),
+        "password": password
+    }
+    schema = AdminSchema()
+    user = schema.load(admin_data)
+    # print(user.get_first_name())
+    result = schema.dump(user)
+    print(result)
+    add_admin(result)
+
+
 def add_to_database(data):
     data['encodings'] = json.dumps(data['encodings'])
     data['uses'] = json.dumps(data['uses'])
@@ -128,12 +161,47 @@ def add_to_database(data):
     conn = sqlite3.connect('users.db')
     c = conn.cursor()
     c.execute("SELECT * FROM users WHERE encodings=?", (data['encodings'],))
+    conn2 = sqlite3.connect('admins.db')
+    c2 = conn2.cursor()
+    c2.execute("SELECT * FROM admins WHERE encodings=?", (data['encodings'],))
+
     if len(c.fetchall()) != 0:
         print("Duplicate user will not be added to database")
+    elif len(c2.fetchall()) != 0:
+        print("User already exists as admin")
     else:
         c.execute("INSERT INTO users VALUES (?,?,?,?,?,?,?)", (
         data['name'], data['encodings'], data['rhr'], data['disability'], data['uses'], data['doc'], data['level']))
 
+    conn2.commit()
+    conn2.close()
+    conn.commit()
+    conn.close()
+
+
+def add_admin(data):
+    data['encodings'] = json.dumps(data['encodings'])
+    data['uses'] = json.dumps(data['uses'])
+
+    conn = sqlite3.connect('admins.db')
+    c = conn.cursor()
+    c.execute("SELECT * FROM admins WHERE encodings=?", (data['encodings'],))
+
+    conn2 = sqlite3.connect('users.db')
+    c2 = conn2.cursor()
+    c2.execute("SELECT * FROM users WHERE encodings=?", (data['encodings'],))
+
+    if len(c.fetchall()) != 0:
+        print("Duplicate user will not be added to database")
+    elif len(c2.fetchall()) != 0:
+        print("User already exists")
+    else:
+        c.execute("INSERT INTO admins VALUES (?,?,?,?,?,?,?,?)", (
+        data['name'], data['encodings'], data['rhr'], data['disability'], data['uses'], data['doc'], data['level'],
+        data['password']))
+
+    conn2.commit()
+    conn2.close()
     conn.commit()
     conn.close()
 
@@ -146,6 +214,16 @@ def search_database(encodings):
     print(c.fetchone())
     conn.commit()
     conn.close()
+
+def search_passwords(password):
+    conn = sqlite3.connect('admins.db')
+    c = conn.cursor()
+    c.execute("SELECT * FROM admins WHERE password=?", (password,))
+    if c.fetchone():
+        return True
+    conn.commit()
+    conn.close()
+    return False
 
 
 def delete_from_database(name, encodings):
@@ -187,16 +265,60 @@ def load_users():
     return active_users
 
 
-# createUser("Alex Ram", [1235], 95, 0)
+def load_admins():
+    active_users = []
+    conn = sqlite3.connect('admins.db')
+    c = conn.cursor()
 
-# conn = sqlite3.connect('users.db')
-# c = conn.cursor()
+    c.execute("SELECT * FROM admins")
+    users_in_database = c.fetchall()
 
+    for i in users_in_database:
+        schema = AdminSchema()
+        admin_data = {
+            "name": i[0],
+            "encodings": json.loads(i[1]),
+            "rhr": i[2],
+            "disability": i[3],
+            "level": i[6],
+            "uses": json.loads(i[4]),
+            "doc": i[5],
+            "password": i[7]
+        }
+
+        user = schema.load(admin_data)
+        active_users.append(user)
+
+    conn.commit()
+    conn.close()
+
+    return active_users
+
+
+# createUser("Hayden Test", [12], 95, 0)
+# createUser("Owen Test", [1235], 95, 0)
+# createUser("Alex Test", [1234], 95, 0)
+# createAdmin("Owen Boxx", [123], 95, 0, 'team11')
+# createUser("test", [4322], 95, 0)
+# createAdmin("Owen Boxx", [4322], 95, 0, 'team11')
+#conn = sqlite3.connect('users.db')
+#c = conn.cursor()
+#conn2 = sqlite3.connect('admins.db')
+#c2 = conn2.cursor()
 # c.execute("SELECT * FROM users WHERE name='Owen'")
 
 # Comment out
-# c.execute("SELECT * FROM users")
-# print(c.fetchall())
+#c.execute("SELECT * FROM users")
+#print(c.fetchall())
+
+#c2.execute("SELECT * FROM admins")
+#print(c2.fetchall())
+
+#conn.commit()
+#conn.close()
+
+#conn2.commit()
+#conn2.close()
 
 # delete_from_database('Alex', [1235])
 
@@ -209,8 +331,9 @@ def load_users():
 # fetchall
 # fetchmany
 
-# conn.commit()
-# conn.close()
 
-
-#load_users()
+<<<<<<< HEAD
+load_users()
+=======
+load_users()
+>>>>>>> 00fc302387b3f16b32d4fad167c3cced873392e0
